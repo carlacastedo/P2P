@@ -92,10 +92,15 @@ public class BaseDatos {
     public void conseguirAmigos(String usuario) {
         Connection con = this.conexion;
 
-        String consulta = "select solicitante from solicitar_amistad where solicitado=? and estado='aceptado'";
+        String consulta = "select solicitante from solicitar_amistad"
+                            +"where solicitado=? and estado='aceptado'"
+                            +"UNION"
+                            +"select solicitado from solicitar_amistad"
+                            +"where solicitante=? and estado='aceptado'";
 
         try (PreparedStatement stmUsuario = con.prepareStatement(consulta)) {
             stmUsuario.setString(1, usuario);
+            stmUsuario.setString(2, usuario);
             try (ResultSet rsUsuario = stmUsuario.executeQuery()) {
                 while (rsUsuario.next()) {
                     System.out.println(rsUsuario.getString("solicitante"));
