@@ -4,9 +4,7 @@
  */
 package p2p;
 
-
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 import java.sql.*;
@@ -20,35 +18,76 @@ public class BaseDatos {
     private Connection conexion;
 
     public BaseDatos() {
+        conexion = generarConexionBaseDatos();
+    }
 
+    public static Connection generarConexionBaseDatos() {
         Properties configuracion = new Properties();
-        FileInputStream arqConfiguracion;
+        FileInputStream archivoConfiguracion;
+        Connection conexionGenerada = null;
 
         try {
-            arqConfiguracion = new FileInputStream("baseDatos.properties");
-            configuracion.load(arqConfiguracion);
-            arqConfiguracion.close();
+            archivoConfiguracion = new FileInputStream("baseDatos.properties");
+            configuracion.load(archivoConfiguracion);
+            archivoConfiguracion.close();
 
-            Properties usuario = new Properties();
+            conexionGenerada = generarConexionDesdePropiedades(configuracion);
 
-            String gestor = configuracion.getProperty("gestor");
-
-            usuario.setProperty("user", configuracion.getProperty("usuario"));
-            usuario.setProperty("password", configuracion.getProperty("clave"));
-            this.conexion = java.sql.DriverManager.getConnection("jdbc:" + gestor + "://"
-                    + configuracion.getProperty("servidor") + ":"
-                    + configuracion.getProperty("puerto") + "/"
-                    + configuracion.getProperty("baseDatos"),
-                    usuario);
-
-        } catch (FileNotFoundException f) {
-            System.out.println(f.getMessage());
-        } catch (IOException | java.sql.SQLException i) {
-            System.out.println(i.getMessage());
+        } catch (IOException | SQLException f) {
+            System.err.println(f.getMessage());
         }
 
+        return conexionGenerada;
     }
-    
-    
+
+    public static Connection generarConexionDesdePropiedades(Properties configuracion) throws SQLException {
+        Properties usuario = new Properties();
+        Connection conexionObtenida;
+
+        String urlConexion = generarUrlConexion(configuracion);
+
+        usuario.setProperty("user", configuracion.getProperty("usuario"));
+        usuario.setProperty("password", configuracion.getProperty("clave"));
+
+        conexionObtenida = java.sql.DriverManager.getConnection(urlConexion, usuario);
+
+        return conexionObtenida;
+    }
+
+    private static String generarUrlConexion(Properties configuracion) {
+        StringBuilder urlBuilder = new StringBuilder();
+        urlBuilder.append("jdbc:");
+        urlBuilder.append(configuracion.getProperty("gestor"));
+        urlBuilder.append("://");
+        urlBuilder.append(configuracion.getProperty("servidor"));
+        urlBuilder.append(":");
+        urlBuilder.append(configuracion.getProperty("puerto"));
+        urlBuilder.append("/");
+        urlBuilder.append(configuracion.getProperty("baseDatos"));
+
+        return urlBuilder.toString();
+    }
+
+    public void consultarUsuarios() {
+        Connection con = this.conexion;
+        PreparedStatement stmUsuarios = null;
+        ResultSet rsUsuarios;
+        String consulta = "select * from usuarios";
+        try {
+            stmUsuarios = con.prepareStatement(consulta);
+            rsUsuarios = stmUsuarios.executeQuery();
+            while (rsUsuarios.next()) {
+                System.out.println(rsUsuarios.getString("nombre") + rsUsuarios.getString("contraseña"));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                stmUsuarios.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
 
 }
