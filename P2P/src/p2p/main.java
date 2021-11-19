@@ -13,6 +13,6 @@ public class main {
 
     public static void main(String[] args) {
         BaseDatos bd = new BaseDatos();
-        bd.consultarUsuarios();
+        bd.conseguirAmigos("carla");
     }
 }
