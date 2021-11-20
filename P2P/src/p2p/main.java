@@ -14,6 +14,14 @@ public class main {
     public static void main(String[] args) {
         BaseDatos bd = new BaseDatos();
         bd.consultarUsuarios();
-        bd.conseguirAmigos("carla");
+        bd.insertarUsuario("eliseo", "fcbarcelona");
+        bd.insertarUsuario("dani", "madrid");
+        bd.modificarContraseña("dani", "fonseca");
+        bd.enviarSolicitud("dani", "eliseo");
+        bd.consultarSolicitudes("eliseo");
+        bd.aceptarSolicitud("dani", "eliseo");
+        bd.denegarSolicitud("juan", "carla");
+        bd.enviarSolicitud("juan", "carla"); 
+        bd.eliminarAmigo("dani", "eliseo");
     }
 }
