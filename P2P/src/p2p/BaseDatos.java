@@ -61,7 +61,7 @@ public class BaseDatos {
             System.out.println(ex.getMessage());
         } finally {
             try {
-                stmUsuarios.close();
+                if(stmUsuarios!=null) stmUsuarios.close();
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
@@ -71,11 +71,11 @@ public class BaseDatos {
     public void conseguirAmigos(String usuario) {
         Connection con = this.conexion;
 
-        String consulta = "select solicitante from solicitar_amistad"
-                            +"where solicitado=? and estado='aceptado'"
-                            +"UNION"
-                            +"select solicitado from solicitar_amistad"
-                            +"where solicitante=? and estado='aceptado'";
+        String consulta = "select solicitante from solicitar_amistad "
+                            +"where solicitado=? and estado='aceptado' "
+                            +"UNION "
+                            +"select solicitado from solicitar_amistad "
+                            +"where solicitante=? and estado='aceptado' ";
 
         try (PreparedStatement stmUsuario = con.prepareStatement(consulta)) {
             stmUsuario.setString(1, usuario);
