@@ -7,16 +7,13 @@ package p2p;
 
 /**
  *
- * @author ASUS
+ * @author anton
  */
-public class Principal {
+public class main {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        BaseDatos bd=new BaseDatos();
-        bd.listarUsuarios();
+        BaseDatos bd = new BaseDatos();
+        bd.consultarUsuarios();
+        bd.conseguirAmigos("carla");
     }
-    
 }
