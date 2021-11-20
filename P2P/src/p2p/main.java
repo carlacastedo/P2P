@@ -5,23 +5,35 @@
  */
 package p2p;
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.stage.Stage;
+
 /**
  *
  * @author anton
  */
-public class main {
+public class main extends Application{
 
     public static void main(String[] args) {
+        //esto no se para que sirve pero es para que se abra la ventana
+        launch(args);
         BaseDatos bd = new BaseDatos();
-        bd.consultarUsuarios();
-        bd.insertarUsuario("eliseo", "fcbarcelona");
-        bd.insertarUsuario("dani", "madrid");
-        bd.modificarContraseña("dani", "fonseca");
-        bd.enviarSolicitud("dani", "eliseo");
-        bd.consultarSolicitudes("eliseo");
-        bd.aceptarSolicitud("dani", "eliseo");
-        bd.denegarSolicitud("juan", "carla");
-        bd.enviarSolicitud("juan", "carla"); 
-        bd.eliminarAmigo("dani", "eliseo");
+//        bd.consultarUsuarios();
+//        bd.insertarUsuario("eliseo", "fcbarcelona");
+//        bd.insertarUsuario("dani", "madrid");
+//        bd.modificarContraseña("dani", "fonseca");
+//        bd.enviarSolicitud("dani", "eliseo");
+//        bd.consultarSolicitudes("eliseo");
+//        bd.aceptarSolicitud("dani", "eliseo");
+//        bd.denegarSolicitud("juan", "carla");
+//        bd.enviarSolicitud("juan", "carla"); 
+//        bd.eliminarAmigo("dani", "eliseo");
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        Stage vAutenticacion = FXMLLoader.load(getClass().getResource("VentanaAutenticacion.fxml"));
+        vAutenticacion.show();
     }
 }

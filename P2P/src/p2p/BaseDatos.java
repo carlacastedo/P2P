@@ -38,7 +38,6 @@ public class BaseDatos {
                     + configuracion.getProperty("puerto") + "/"
                     + configuracion.getProperty("baseDatos"),
                     usuario);
-            
         } catch (FileNotFoundException f) {
             System.out.println(f.getMessage());
         } catch (IOException | java.sql.SQLException i) {
@@ -91,7 +90,7 @@ public class BaseDatos {
             System.err.println(e.getMessage());
         }
     }
-    
+
     public void consultarSolicitudes(String solicitado) {
         Connection con = this.conexion;
 
@@ -182,8 +181,8 @@ public class BaseDatos {
             System.err.println(e.getMessage());
         }
     }
-    
-    public void modificarContraseña(String usuario, String contraseña){
+
+    public void modificarContraseña(String usuario, String contraseña) {
         Connection con = this.conexion;
 
         String modificacion = "update usuarios set contraseña=? where nombre=?";
@@ -195,6 +194,7 @@ public class BaseDatos {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        
+
     }
+
 }
