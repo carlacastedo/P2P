@@ -4,7 +4,6 @@
  */
 package p2p;
 
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -48,7 +47,34 @@ public class BaseDatos {
         }
 
     }
-    
-    
+
+    public void listarUsuarios() {
+        Connection con = conexion;
+        PreparedStatement stmUsuarios = null;
+        ResultSet rsUsuarios;
+
+        String consulta = "select * "
+                + "from usuarios";
+
+        try {
+            stmUsuarios = con.prepareStatement(consulta);
+            rsUsuarios = stmUsuarios.executeQuery();
+            while (rsUsuarios.next()) {
+                System.out.println(rsUsuarios.getString("nombre") + " " + rsUsuarios.getString("contraseña"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                if(stmUsuarios!=null){
+                stmUsuarios.close();
+                }
+                
+            } catch (SQLException e) {
+                System.out.println("Imposible cerrar cursores");
+            }
+        }
+    }
 
 }
