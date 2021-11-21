@@ -39,7 +39,7 @@ public class AutenticacionControlador implements Initializable {
     @FXML
     private Button btnIniciarSesion;
 
-    private P2PImpl bbdd;
+    private Cliente c;
 
     /**
      * Initializes the controller class.
@@ -49,18 +49,16 @@ public class AutenticacionControlador implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            bbdd = new P2PImpl();
-        } catch (RemoteException ex) {
-            Logger.getLogger(AutenticacionControlador.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
         // asocia el estado del botón con el estado de los text fields
         BooleanBinding botonDeshabilitado = txtUsuario.textProperty().isEmpty().or(txtContraseña.textProperty().isEmpty());
 
         btnIniciarSesion.disableProperty().bind(botonDeshabilitado);
         btnRegistrarse.disableProperty().bind(botonDeshabilitado);
 
+    }
+    
+    public void inicializarAtributos(Cliente c) {
+        this.c= c;
     }
 
     @FXML

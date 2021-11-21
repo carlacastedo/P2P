@@ -22,14 +22,22 @@ public class VClienteController implements Initializable {
     private TextField txtBuscar;
     @FXML
     private TextField textMensaje;
+    
+    private Cliente c;
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("Hola");
-    }    
+    }   
+    
+    public void inicializarAtributos(Cliente c) {
+        this.c= c;
+    }
 
     
 }
