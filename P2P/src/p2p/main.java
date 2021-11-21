@@ -5,6 +5,9 @@
  */
 package p2p;
 
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -18,7 +21,8 @@ public class main extends Application{
     public static void main(String[] args) {
         //esto no se para que sirve pero es para que se abra la ventana
         launch(args);
-        BaseDatos bd = new BaseDatos();
+        try {
+            P2PImpl bd = new P2PImpl();
 //        bd.consultarUsuarios();
 //        bd.insertarUsuario("eliseo", "fcbarcelona");
 //        bd.insertarUsuario("dani", "madrid");
@@ -29,6 +33,9 @@ public class main extends Application{
 //        bd.denegarSolicitud("juan", "carla");
 //        bd.enviarSolicitud("juan", "carla"); 
 //        bd.eliminarAmigo("dani", "eliseo");
+        } catch (RemoteException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 

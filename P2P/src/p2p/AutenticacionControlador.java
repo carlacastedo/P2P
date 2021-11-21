@@ -7,6 +7,7 @@ package p2p;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +19,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -39,7 +39,7 @@ public class AutenticacionControlador implements Initializable {
     @FXML
     private Button btnIniciarSesion;
 
-    private BaseDatos bbdd;
+    private P2PImpl bbdd;
 
     /**
      * Initializes the controller class.
@@ -49,7 +49,11 @@ public class AutenticacionControlador implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        bbdd = new BaseDatos();
+        try {
+            bbdd = new P2PImpl();
+        } catch (RemoteException ex) {
+            Logger.getLogger(AutenticacionControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         // asocia el estado del botón con el estado de los text fields
         BooleanBinding botonDeshabilitado = txtUsuario.textProperty().isEmpty().or(txtContraseña.textProperty().isEmpty());

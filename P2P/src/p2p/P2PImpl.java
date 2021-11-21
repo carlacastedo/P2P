@@ -7,6 +7,8 @@ package p2p;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
 import java.util.Properties;
 
@@ -14,11 +16,12 @@ import java.util.Properties;
  *
  * @author basesdatos
  */
-public class BaseDatos {
+public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
 
     private Connection conexion;
 
-    public BaseDatos() {
+    public P2PImpl()throws RemoteException {
+        super( );
         Properties configuracion = new Properties();
         FileInputStream arqConfiguracion;
 
