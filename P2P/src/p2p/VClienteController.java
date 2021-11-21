@@ -7,10 +7,9 @@ package p2p;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
@@ -20,7 +19,9 @@ import javafx.scene.control.Button;
 public class VClienteController implements Initializable {
 
     @FXML
-    private Button btn;
+    private TextField txtBuscar;
+    @FXML
+    private TextField textMensaje;
 
     /**
      * Initializes the controller class.
@@ -30,8 +31,5 @@ public class VClienteController implements Initializable {
         System.out.println("Hola");
     }    
 
-    @FXML
-    private void pulsarBoton(ActionEvent event) {
-    }
     
 }

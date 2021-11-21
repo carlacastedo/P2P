@@ -5,29 +5,29 @@
 <?import javafx.scene.Scene?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.stage.Stage?>
 
-<Stage title="Autenticación" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="p2p.AutenticacionControlador">
+<Stage title="Autenticación" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="p2p.AutenticacionControlador">
     <scene>
         <Scene>
-            <AnchorPane prefHeight="236.0" prefWidth="269.0">
+            <AnchorPane prefHeight="236.0" prefWidth="269.0" style="-fx-background-color: #212f3d;">
             <children>
                <VBox alignment="CENTER" prefHeight="236.0" prefWidth="271.0" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <children>
-                     <TextArea fx:id="txtUsuario" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="202.0" promptText="Usuario" />
-                     <PasswordField fx:id="txtContraseña" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="198.0" promptText="Contraseña" />
+                     <TextField fx:id="txtUsuario" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="198.0" promptText="Usuario" style="-fx-background-color: #2c3e50; -fx-text-fill: #d5d8dc;" />
+                     <PasswordField fx:id="txtContraseña" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="198.0" promptText="Contraseña" style="-fx-background-color: #2c3e50; -fx-text-fill: #d5d8dc;" />
                      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="192.0" spacing="30.0">
                         <children>
-                           <Button fx:id="btnRegistrarse" disable="true" mnemonicParsing="false" onAction="#registrarUsuario" text="Registrarse" textAlignment="CENTER">
+                           <Button fx:id="btnRegistrarse" disable="true" mnemonicParsing="false" onAction="#registrarUsuario" style="-fx-background-color: #566573;" text="Registrarse" textAlignment="CENTER" textFill="#d5d8dc">
                               <cursor>
                                  <Cursor fx:constant="HAND" />
                               </cursor>
                            </Button>
-                           <Button fx:id="btnIniciarSesion" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#iniciarSesion" text="Iniciar Sesión" textAlignment="CENTER">
+                           <Button fx:id="btnIniciarSesion" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#iniciarSesion" style="-fx-background-color: #566573;" text="Iniciar Sesión" textAlignment="CENTER" textFill="#d5d8dc">
                               <cursor>
                                  <Cursor fx:constant="HAND" />
                               </cursor>

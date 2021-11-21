@@ -19,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -30,7 +31,7 @@ import javafx.stage.Stage;
 public class AutenticacionControlador implements Initializable {
 
     @FXML
-    private TextArea txtUsuario;
+    private TextField txtUsuario;
     @FXML
     private PasswordField txtContraseña;
     @FXML
