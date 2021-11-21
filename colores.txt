@@ -1,0 +1,9 @@
+hex
+#d5d8dc
+#808b96
+#566573
+#2c3e50
+#212f3d
+#17202a
+
+Están ordenados de máis claro a máis oscuro
