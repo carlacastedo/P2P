@@ -222,7 +222,7 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface {
             stmUsuario.setString(1, usuario);
             stmUsuario.setString(2, contraseña);
             try (ResultSet rsUsuario = stmUsuario.executeQuery()) {
-                if (rsUsuario != null) {
+                if (rsUsuario.next()) {
                     existe = true;
                 }
             }
