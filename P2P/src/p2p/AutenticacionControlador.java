@@ -7,7 +7,6 @@ package p2p;
 
 import java.io.IOException;
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -97,7 +96,7 @@ public class AutenticacionControlador implements Initializable {
             // Cargo el scene
             Scene scene = new Scene(ventana);
             Stage stage = new Stage();
-            VClienteController controlador = loader.getController();
+            //VClienteController controlador = loader.getController();
 
             // Seteo la scene y la muestro
             stage.setScene(scene);
