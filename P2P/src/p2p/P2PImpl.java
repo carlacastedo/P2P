@@ -16,12 +16,12 @@ import java.util.Properties;
  *
  * @author basesdatos
  */
-public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
+public class P2PImpl extends UnicastRemoteObject implements P2PInterface {
 
     private Connection conexion;
 
-    public P2PImpl()throws RemoteException {
-        super( );
+    public P2PImpl() throws RemoteException {
+        super();
         Properties configuracion = new Properties();
         FileInputStream arqConfiguracion;
 
@@ -53,13 +53,13 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
         Connection con = this.conexion;
         PreparedStatement stmUsuarios = null;
         ResultSet rsUsuarios;
-        String texto="";
+        String texto = "";
         String consulta = "select nombre from usuarios";
         try {
             stmUsuarios = con.prepareStatement(consulta);
             rsUsuarios = stmUsuarios.executeQuery();
             while (rsUsuarios.next()) {
-                texto+=rsUsuarios.getString("nombre");
+                texto += rsUsuarios.getString("nombre");
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -211,4 +211,24 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
 
     }
 
+    @Override
+    public Boolean existeUsuario(String usuario, String contraseña) throws java.rmi.RemoteException{
+        Boolean existe = false;
+        Connection con = this.conexion;
+
+        String consulta = "select from usuarios where nombre=? and contraseña=?";
+
+        try (PreparedStatement stmUsuario = con.prepareStatement(consulta)) {
+            stmUsuario.setString(1, usuario);
+            stmUsuario.setString(2, contraseña);
+            try (ResultSet rsUsuario = stmUsuario.executeQuery()) {
+                if (rsUsuario != null) {
+                    existe = true;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return existe;
+    }
 }
