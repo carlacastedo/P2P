@@ -16,7 +16,7 @@ import javafx.stage.Stage;
  *
  * @author anton
  */
-public class main extends Application{
+public class Cliente extends Application{
 
     public static void main(String[] args) {
         //esto no se para que sirve pero es para que se abra la ventana
@@ -34,7 +34,7 @@ public class main extends Application{
 //        bd.enviarSolicitud("juan", "carla"); 
 //        bd.eliminarAmigo("dani", "eliseo");
         } catch (RemoteException ex) {
-            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

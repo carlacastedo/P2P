@@ -49,16 +49,17 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
     }
 
     @Override
-    public void consultarUsuarios() {
+    public String consultarUsuarios() {
         Connection con = this.conexion;
         PreparedStatement stmUsuarios = null;
         ResultSet rsUsuarios;
+        String texto="";
         String consulta = "select nombre from usuarios";
         try {
             stmUsuarios = con.prepareStatement(consulta);
             rsUsuarios = stmUsuarios.executeQuery();
             while (rsUsuarios.next()) {
-                System.out.println(rsUsuarios.getString("nombre"));
+                texto+=rsUsuarios.getString("nombre");
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -71,6 +72,7 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
                 System.out.println(ex.getMessage());
             }
         }
+        return texto;
     }
 
     @Override

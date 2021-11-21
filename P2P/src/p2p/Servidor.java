@@ -38,7 +38,7 @@ public class Servidor {
             Naming.rebind(registryURL, exportedObj);
             listRegistry(registryURL); 
             //Imprimimos que el servidor está listo para su funcionamiento
-            System.out.println("Servidor MonteCarlo listo");
+            System.out.println("Servidor P2P listo");
         }//Si hay alguna excepción se recoge y se sale
         catch (IOException | NumberFormatException e) {
             System.out.println(e);
