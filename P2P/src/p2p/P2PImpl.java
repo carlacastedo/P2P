@@ -48,6 +48,7 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
         }
     }
 
+    @Override
     public void consultarUsuarios() {
         Connection con = this.conexion;
         PreparedStatement stmUsuarios = null;
@@ -72,6 +73,7 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
         }
     }
 
+    @Override
     public void consultarAmigos(String usuario) {
         Connection con = this.conexion;
 
@@ -94,6 +96,7 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
         }
     }
 
+    @Override
     public void consultarSolicitudes(String solicitado) {
         Connection con = this.conexion;
 
@@ -111,6 +114,7 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
         }
     }
 
+    @Override
     public void insertarUsuario(String usuario, String contraseña) {
         Connection con = this.conexion;
 
@@ -125,6 +129,7 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
         }
     }
 
+    @Override
     public void enviarSolicitud(String solicitante, String solicitado) {
         Connection con = this.conexion;
 
@@ -140,6 +145,7 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
         }
     }
 
+    @Override
     public void aceptarSolicitud(String solicitante, String solicitado) {
         Connection con = this.conexion;
 
@@ -155,6 +161,7 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
         }
     }
 
+    @Override
     public void denegarSolicitud(String solicitante, String solicitado) {
         Connection con = this.conexion;
 
@@ -170,6 +177,7 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
         }
     }
 
+    @Override
     public void eliminarAmigo(String solicitante, String solicitado) {
         Connection con = this.conexion;
 
@@ -185,6 +193,7 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface{
         }
     }
 
+    @Override
     public void modificarContraseña(String usuario, String contraseña) {
         Connection con = this.conexion;
 
