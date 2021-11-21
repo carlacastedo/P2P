@@ -5,15 +5,22 @@
  */
 package p2p;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -35,6 +42,9 @@ public class AutenticacionControlador implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -50,14 +60,48 @@ public class AutenticacionControlador implements Initializable {
 
     @FXML
     private void registrarUsuario(ActionEvent event) {
-//        if (!this.txtUsuario.getText().isEmpty() && !this.txtContraseña.getText().isEmpty()) {
-//            bbdd.insertarUsuario(this.txtUsuario.getText(), this.txtContraseña.getText());
-//        }
+        //        if (!this.txtUsuario.getText().isEmpty() && !this.txtContraseña.getText().isEmpty()) {
+        //            bbdd.insertarUsuario(this.txtUsuario.getText(), this.txtContraseña.getText());
+        //        }
 
+        try {
+            Stage myStage = (Stage) this.txtUsuario.getScene().getWindow();
+            myStage.close();
+            abrirVentanaCliente();
+        } catch (IOException ex) {
+            Logger.getLogger(AutenticacionControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML
     private void iniciarSesion(ActionEvent event) {
+        try {
+            Stage myStage = (Stage) this.txtUsuario.getScene().getWindow();
+            myStage.close();
+            abrirVentanaCliente();
+        } catch (IOException ex) {
+            Logger.getLogger(AutenticacionControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    private void abrirVentanaCliente() throws IOException {
+
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("VCliente.fxml"));
+            // Cargo la ventana
+            Pane ventana = (Pane) loader.load();
+            // Cargo el scene
+            Scene scene = new Scene(ventana);
+            Stage stage = new Stage();
+            VClienteController controlador = loader.getController();
+
+            // Seteo la scene y la muestro
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

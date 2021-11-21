@@ -29,6 +29,7 @@ public class main extends Application{
 //        bd.denegarSolicitud("juan", "carla");
 //        bd.enviarSolicitud("juan", "carla"); 
 //        bd.eliminarAmigo("dani", "eliseo");
+
     }
 
     @Override
