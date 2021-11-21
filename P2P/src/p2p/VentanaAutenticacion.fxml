@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="236.0" prefWidth="269.0" style="-fx-background-color: #212f3d;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="p2p.VentanaAutenticacionController">
+<AnchorPane prefHeight="236.0" prefWidth="269.0" style="-fx-background-color: #212f3d;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="p2p.AutenticacionControlador">
    <children>
       <VBox alignment="CENTER" prefHeight="236.0" prefWidth="271.0" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>

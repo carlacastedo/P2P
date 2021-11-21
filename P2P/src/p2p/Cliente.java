@@ -55,13 +55,13 @@ public class Cliente extends Application{
         vAutenticacion.show();*/
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("VCliente.fxml"));
+            loader.setLocation(getClass().getResource("VentanaAutenticacion.fxml"));
             // Cargo la ventana
             Pane ventana = (Pane) loader.load();
 
             // Cargo el scene
             Scene scene = new Scene(ventana);
-            VClienteController controlador = loader.getController();
+            AutenticacionControlador controlador = loader.getController();
             controlador.inicializarAtributos(this);
 
             // Seteo la scene y la muestro
