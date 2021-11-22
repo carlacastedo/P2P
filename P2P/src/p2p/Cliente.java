@@ -26,15 +26,16 @@ import javafx.stage.Stage;
 public class Cliente extends Application {
 
     private static ClienteInterfaz cliente;
+    private static ServidorInterfaz servidor;
+    
 
     public static void main(String[] args) {
+        
         try {
             String host = "localhost";
             String puerto = "1500";
             String registryURL = "rmi://" + host + ":" + puerto + "/p2p";
-            ServidorInterfaz servidor = (ServidorInterfaz) Naming.lookup(registryURL);
-            cliente = new ClienteImpl(servidor);
-            servidor.registrarCliente(cliente);
+            servidor = (ServidorInterfaz) Naming.lookup(registryURL);
             launch(args);
         } catch (NotBoundException | MalformedURLException | RemoteException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -51,7 +52,7 @@ public class Cliente extends Application {
             // Cargo el scene
             Scene scene = new Scene(ventana);
             AutenticacionControlador controlador = loader.getController();
-            controlador.inicializarAtributos(cliente);
+            controlador.inicializarAtributos(this);
 
             // Seteo la scene y la muestro
             stage.setScene(scene);
@@ -62,4 +63,19 @@ public class Cliente extends Application {
             System.out.println(e.getMessage());
         }
     }
+    
+    public Boolean existeUsuario(String usuario, String contraseña) throws RemoteException{
+        return servidor.existeUsuario(usuario, contraseña);
+    }
+    
+    public void insertarUsuario(String usuario, String contraseña) throws RemoteException{
+        servidor.insertarUsuario(usuario,contraseña);
+    }
+    
+    public void registrarCliente(String nombre) throws RemoteException{
+        cliente = new ClienteImpl(nombre);
+        servidor.registrarCliente(cliente);
+    }
+    
+    
 }

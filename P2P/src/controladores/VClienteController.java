@@ -16,8 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import p2p.ClienteImpl;
-import p2p.ClienteInterfaz;
+import p2p.Cliente;
 
 /**
  * FXML Controller class
@@ -39,7 +38,7 @@ public class VClienteController implements Initializable {
     @FXML
     private Label lblNombre;
     
-    private ClienteInterfaz c;
+    private Cliente c;
     
     
 
@@ -57,7 +56,7 @@ public class VClienteController implements Initializable {
         
     }
 
-    public void inicializarAtributos(ClienteInterfaz c, String usuario) {
+    public void inicializarAtributos(Cliente c, String usuario) {
         this.c = c;
         this.lblNombre.setText(usuario);
     }

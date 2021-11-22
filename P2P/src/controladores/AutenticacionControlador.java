@@ -7,7 +7,6 @@ package controladores;
 
 import java.io.IOException;
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
@@ -21,7 +20,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import p2p.ClienteInterfaz;
+import p2p.Cliente;
 
 /**
  * FXML Controller class
@@ -39,7 +38,7 @@ public class AutenticacionControlador implements Initializable {
     @FXML
     private Button btnIniciarSesion;
 
-    private ClienteInterfaz c;
+    private Cliente c;
 
     /**
      * Initializes the controller class.
@@ -56,62 +55,56 @@ public class AutenticacionControlador implements Initializable {
 
     }
 
-    public void inicializarAtributos(ClienteInterfaz c) {
+    public void inicializarAtributos(Cliente c) {
         this.c = c;
     }
 
     @FXML
     private void registrarUsuario(ActionEvent event) {
+        //comprobamos si el usuario existe o no en el sistema
+
         try {
-            //comprobamos si el usuario existe o no en el sistema
-            if (!this.c.getServidor().existeUsuario(this.txtUsuario.getText(), this.txtContraseña.getText())) {
-                try {
-                    //creamos el usuario en la base de datos
-                    this.c.getServidor().insertarUsuario(this.txtUsuario.getText(), this.txtContraseña.getText());
-                    //informamos de la creacion
-                    Alert a = new Alert(Alert.AlertType.INFORMATION);
-                    a.setContentText("Usuario creado");
-                    a.showAndWait();
-                    //abrimos la ventana de los clientes
-                    abrirVentanaCliente();
-                    //cerramos la ventana de autenticacion
-                    Stage myStage = (Stage) this.txtUsuario.getScene().getWindow();
-                    myStage.close();
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
-                }
+            if (!this.c.existeUsuario(this.txtUsuario.getText(), this.txtContraseña.getText())) {
+                //creamos el usuario en la base de datos
+                this.c.insertarUsuario(this.txtUsuario.getText(), this.txtContraseña.getText());
+                //informamos de la creacion
+                Alert a = new Alert(Alert.AlertType.INFORMATION);
+                a.setContentText("Usuario creado");
+                a.showAndWait();
+                //abrimos la ventana de los clientes
+                abrirVentanaCliente();
+                //cerramos la ventana de autenticacion
+                Stage myStage = (Stage) this.txtUsuario.getScene().getWindow();
+                myStage.close();
             } else {
                 Alert a = new Alert(Alert.AlertType.ERROR);
                 a.setContentText("El usuario ya existe en el sistema");
                 a.showAndWait();
             }
-        } catch (RemoteException ex) {
+        } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
+
     }
 
     @FXML
     private void iniciarSesion(ActionEvent event) {
-        try {
-            if (this.c.getServidor().existeUsuario(this.txtUsuario.getText(), this.txtContraseña.getText())) {
-                try {
-                    //abrimos la ventana del cliente
-                    abrirVentanaCliente();
-                    //cerramos la ventana de autenticacion
-                    Stage myStage = (Stage) this.txtUsuario.getScene().getWindow();
-                    myStage.close();
-                    c.getServidor().registrarCliente(c);
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
-                }
+        try {if (this.c.existeUsuario(this.txtUsuario.getText(), this.txtContraseña.getText())) {
+            
+                //abrimos la ventana del cliente
+                abrirVentanaCliente();
+                //cerramos la ventana de autenticacion
+                Stage myStage = (Stage) this.txtUsuario.getScene().getWindow();
+                myStage.close();
+                c.registrarCliente(this.txtUsuario.getText());
             } else {
                 Alert a = new Alert(Alert.AlertType.ERROR);
                 a.setContentText("Autenticacion incorrecta");
                 a.showAndWait();
             }
-        } catch (RemoteException ex) {
-            System.out.println(ex.getMessage());
-        }
+        }catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
     }
 
     private void abrirVentanaCliente() throws IOException {
@@ -124,7 +117,7 @@ public class AutenticacionControlador implements Initializable {
             Scene scene = new Scene(ventana);
             Stage stage = new Stage();
             VClienteController controlador = loader.getController();
-            controlador.inicializarAtributos(c, this.txtUsuario.getText());
+            controlador.inicializarAtributos(c,this.txtUsuario.getText());
             // Seteo la scene y la muestro
             stage.setScene(scene);
             stage.setTitle("Chat");

@@ -13,8 +13,6 @@ import java.rmi.*;
  */
 public interface ClienteInterfaz extends Remote {
 
-    public ServidorInterfaz getServidor() throws java.rmi.RemoteException;
-
     public String getNombreCliente() throws java.rmi.RemoteException;
 
 }
