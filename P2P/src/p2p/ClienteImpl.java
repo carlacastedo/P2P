@@ -5,6 +5,7 @@
  */
 package p2p;
 
+import controladores.VClienteController;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -15,8 +16,9 @@ import java.rmi.server.UnicastRemoteObject;
 public class ClienteImpl extends UnicastRemoteObject implements ClienteInterfaz {
 
     private String nombreCliente;
+    private VClienteController controlador;
 
-    public ClienteImpl(String nombre) throws RemoteException {
+    public ClienteImpl(String nombre,VClienteController controlador ) throws RemoteException {
         super();
         this.nombreCliente=nombre;
     }

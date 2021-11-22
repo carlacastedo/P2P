@@ -72,7 +72,7 @@ public class AutenticacionControlador implements Initializable {
                 a.setContentText("Usuario creado");
                 a.showAndWait();
                 //abrimos la ventana de los clientes
-                abrirVentanaCliente();
+                VClienteController controlador=abrirVentanaCliente();
                 //cerramos la ventana de autenticacion
                 Stage myStage = (Stage) this.txtUsuario.getScene().getWindow();
                 myStage.close();
@@ -92,11 +92,11 @@ public class AutenticacionControlador implements Initializable {
         try {if (this.c.existeUsuario(this.txtUsuario.getText(), this.txtContraseña.getText())) {
             
                 //abrimos la ventana del cliente
-                abrirVentanaCliente();
+                VClienteController controlador=abrirVentanaCliente();
                 //cerramos la ventana de autenticacion
                 Stage myStage = (Stage) this.txtUsuario.getScene().getWindow();
                 myStage.close();
-                c.registrarCliente(this.txtUsuario.getText());
+                c.registrarCliente(this.txtUsuario.getText(),controlador);
             } else {
                 Alert a = new Alert(Alert.AlertType.ERROR);
                 a.setContentText("Autenticacion incorrecta");
@@ -107,7 +107,8 @@ public class AutenticacionControlador implements Initializable {
             }
     }
 
-    private void abrirVentanaCliente() throws IOException {
+    private VClienteController abrirVentanaCliente() throws IOException {
+        VClienteController controlador=null;
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/ventanas/VCliente.fxml"));
@@ -116,7 +117,7 @@ public class AutenticacionControlador implements Initializable {
             // Cargo el scene
             Scene scene = new Scene(ventana);
             Stage stage = new Stage();
-            VClienteController controlador = loader.getController();
+            controlador = loader.getController();
             controlador.inicializarAtributos(c,this.txtUsuario.getText());
             // Seteo la scene y la muestro
             stage.setScene(scene);
@@ -126,5 +127,6 @@ public class AutenticacionControlador implements Initializable {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+        return controlador;
     }
 }

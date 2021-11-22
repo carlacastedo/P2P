@@ -6,6 +6,7 @@
 package p2p;
 
 import controladores.AutenticacionControlador;
+import controladores.VClienteController;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -72,10 +73,9 @@ public class Cliente extends Application {
         servidor.insertarUsuario(usuario,contraseña);
     }
     
-    public void registrarCliente(String nombre) throws RemoteException{
-        cliente = new ClienteImpl(nombre);
+    public void registrarCliente(String nombre,VClienteController controlador) throws RemoteException{
+        cliente = new ClienteImpl(nombre,controlador);
         servidor.registrarCliente(cliente);
     }
-    
-    
+
 }
