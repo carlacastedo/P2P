@@ -15,6 +15,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class ClienteImpl extends UnicastRemoteObject implements ClienteInterfaz {
 
     private ServidorInterfaz servidor;
+    private String nombreCliente;
 
     public ClienteImpl(ServidorInterfaz servidor) throws RemoteException {
         super();
@@ -25,4 +26,10 @@ public class ClienteImpl extends UnicastRemoteObject implements ClienteInterfaz 
     public ServidorInterfaz getServidor() throws java.rmi.RemoteException {
         return servidor;
     }
+
+    @Override
+    public String getNombreCliente() {
+        return nombreCliente;
+    }   
+    
 }

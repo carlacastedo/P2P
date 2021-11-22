@@ -21,7 +21,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import p2p.ClienteImpl;
 import p2p.ClienteInterfaz;
 
 /**
@@ -89,7 +88,6 @@ public class AutenticacionControlador implements Initializable {
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
         }
-        
     }
 
     @FXML
@@ -97,10 +95,12 @@ public class AutenticacionControlador implements Initializable {
         try {
             if (this.c.getServidor().existeUsuario(this.txtUsuario.getText(), this.txtContraseña.getText())) {
                 try {
+                    //abrimos la ventana del cliente
                     abrirVentanaCliente();
+                    //cerramos la ventana de autenticacion
                     Stage myStage = (Stage) this.txtUsuario.getScene().getWindow();
-
                     myStage.close();
+                    c.getServidor().registrarCliente(c);
                 } catch (IOException ex) {
                     System.out.println(ex.getMessage());
                 }

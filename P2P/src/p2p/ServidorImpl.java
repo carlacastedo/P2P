@@ -29,7 +29,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         if (!(clientes.contains(cliente))) {
             clientes.add(cliente);
             System.out.println("Nuevo cliente registrado");
-            hacerCallbacks();
+            notificarAmigos();
         }
     }
 
@@ -42,10 +42,11 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         }
     }
 
-    private synchronized void hacerCallbacks() throws java.rmi.RemoteException {
+    private synchronized void notificarAmigos() throws java.rmi.RemoteException {
         // make callback to each registered client
         System.out.println("**************************************\n Callbacks initiated ---");
         for (int i = 0; i < clientes.size(); i++) {
+            //this.consultarAmigos(clientes.);
             System.out.println("doing " + i + "-th callback\n");
             // convert the vector object to a callback object
             ClienteInterfaz nextClient = (ClienteInterfaz) clientes.get(i);
