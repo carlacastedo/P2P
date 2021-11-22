@@ -29,7 +29,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         if (!(clientes.contains(cliente))) {
             clientes.add(cliente);
             System.out.println("Nuevo cliente registrado");
-            notificarAmigos();
+            notificarAmigos(cliente.getNombreCliente());
         }
     }
 
@@ -42,16 +42,19 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         }
     }
 
-    private synchronized void notificarAmigos() throws java.rmi.RemoteException {
+    private synchronized void notificarAmigos(String nombre) throws java.rmi.RemoteException {
+        ArrayList<String> amigos=consultarAmigos(nombre);
         // make callback to each registered client
         System.out.println("**************************************\n Callbacks initiated ---");
         for (int i = 0; i < clientes.size(); i++) {
             //this.consultarAmigos(clientes.);
             System.out.println("doing " + i + "-th callback\n");
             // convert the vector object to a callback object
-            ClienteInterfaz nextClient = (ClienteInterfaz) clientes.get(i);
-            // invoke the callback method
-            // nextClient.notifyMe("Number of registered clients=" + clientes.size());
+            ClienteInterfaz cliente = (ClienteInterfaz) clientes.get(i);
+            if(amigos.contains(cliente.getNombreCliente())){
+                cliente.notificar(nombre);
+            }
+            
         }// end for
         System.out.println("********************************\n Server completed callbacks ---");
     }
@@ -62,8 +65,8 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     }
 
     @Override
-    public void consultarAmigos(String usuario) throws RemoteException {
-        this.baseDatos.consultarAmigos(usuario);
+    public ArrayList<String> consultarAmigos(String usuario) throws RemoteException {
+        return this.baseDatos.consultarAmigos(usuario);
     }
 
     @Override

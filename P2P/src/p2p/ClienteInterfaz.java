@@ -15,4 +15,5 @@ public interface ClienteInterfaz extends Remote {
 
     public String getNombreCliente() throws java.rmi.RemoteException;
 
+    public void notificar(String amigo) throws java.rmi.RemoteException;
 }

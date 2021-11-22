@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Properties;
 
 /**
@@ -72,8 +73,9 @@ public class BBDD {
         return texto;
     }
 
-    public void consultarAmigos(String usuario) {
+    public ArrayList<String> consultarAmigos(String usuario) {
         Connection con = this.conexion;
+        ArrayList<String> amigos=new ArrayList<>();
 
         String consulta = "select solicitante from solicitar_amistad "
                 + "where solicitado=? and estado='aceptado' "
@@ -86,12 +88,14 @@ public class BBDD {
             stmUsuario.setString(2, usuario);
             try (ResultSet rsUsuario = stmUsuario.executeQuery()) {
                 while (rsUsuario.next()) {
-                    System.out.println(rsUsuario.getString("solicitante"));
+                    amigos.add(rsUsuario.getString("solicitante"));
                 }
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+        
+        return amigos;
     }
 
     public void consultarSolicitudes(String solicitado) {

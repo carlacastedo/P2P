@@ -8,6 +8,8 @@ package controladores;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.binding.BooleanBinding;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -53,6 +55,7 @@ public class VClienteController implements Initializable {
         // asocia el estado del botón con el estado de los text fields
         BooleanBinding botonDeshabilitado = txtMensaje.textProperty().isEmpty();
         btnEnviar.disableProperty().bind(botonDeshabilitado);
+        ObservableList<String> data = FXCollections.observableArrayList();
         
     }
 
@@ -63,6 +66,11 @@ public class VClienteController implements Initializable {
 
     @FXML
     private void enviarMensaje(ActionEvent event) {
+        
+    }
+    
+    public void modificarLista(){
+        //listaAmigos.setItems(ol);
     }
 
 }

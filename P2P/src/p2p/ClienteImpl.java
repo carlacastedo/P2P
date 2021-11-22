@@ -15,20 +15,26 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class ClienteImpl extends UnicastRemoteObject implements ClienteInterfaz {
 
-    private String nombreCliente;
-    private VClienteController controlador;
+    private final String nombreCliente;
+    private final VClienteController controlador;
 
-    public ClienteImpl(String nombre,VClienteController controlador ) throws RemoteException {
+    public ClienteImpl(String nombre, VClienteController controlador) throws RemoteException {
         super();
-        this.nombreCliente=nombre;
+        this.nombreCliente = nombre;
+        this.controlador = controlador;
     }
 
     @Override
-    public String getNombreCliente() {
+    public String getNombreCliente()  throws java.rmi.RemoteException{
         return nombreCliente;
     }
 
+    @Override
+    public void notificar(String amigo) throws java.rmi.RemoteException {
+        //this.controlador.modificarLista(amigo);
+        System.out.println(amigo);
+    }
     
     
-    
+
 }
