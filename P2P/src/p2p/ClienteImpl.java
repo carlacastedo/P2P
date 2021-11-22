@@ -5,29 +5,24 @@
  */
 package p2p;
 
-import java.net.MalformedURLException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 /**
  *
  * @author anton
  */
-public class ClienteImpl implements ClienteInterfaz{
+public class ClienteImpl extends UnicastRemoteObject implements ClienteInterfaz {
 
     private ServidorInterfaz servidor;
 
-    public ClienteImpl(String host, int puerto) {
-        try {
-            String registryURL = "rmi://" + host + ":" + puerto + "/p2p";
-            servidor = (ServidorInterfaz) Naming.lookup(registryURL);
-        } catch (NotBoundException | MalformedURLException | RemoteException ex) {
-            System.out.println(ex.getMessage());
-        }
+    public ClienteImpl(ServidorInterfaz servidor) throws RemoteException {
+        super();
+        this.servidor = servidor;
     }
 
-    public ServidorInterfaz getServidor() {
+    @Override
+    public ServidorInterfaz getServidor() throws java.rmi.RemoteException {
         return servidor;
     }
 }

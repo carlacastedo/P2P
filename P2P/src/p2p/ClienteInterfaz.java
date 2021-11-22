@@ -5,10 +5,14 @@
  */
 package p2p;
 
+import java.rmi.*;
+
 /**
  *
  * @author anton
  */
-public interface ClienteInterfaz {
-    
+public interface ClienteInterfaz extends Remote {
+
+    public ServidorInterfaz getServidor() throws java.rmi.RemoteException ;
+
 }

@@ -33,6 +33,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         }
     }
 
+    @Override
     public synchronized void quitarCliente(ClienteInterfaz cliente) throws java.rmi.RemoteException {
         if (clientes.remove(cliente)) {
             System.out.println("Cliente se fue");

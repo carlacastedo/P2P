@@ -2,16 +2,36 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="566.0" prefWidth="638.0" style="-fx-background-color: #566573;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.VClienteController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="697.0" style="-fx-background-color: #566573;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.VClienteController">
    <children>
-      <Pane prefHeight="572.0" prefWidth="64.0" style="-fx-background-color: #17202a;" />
-      <Pane layoutX="64.0" prefHeight="572.0" prefWidth="200.0" style="-fx-background-color: #212f3d;">
+      <Pane prefHeight="572.0" prefWidth="118.0" style="-fx-background-color: #17202a;">
+         <children>
+            <VBox alignment="TOP_CENTER" layoutY="30.0" prefHeight="126.0" prefWidth="118.0" spacing="10.0">
+               <children>
+                  <ImageView fx:id="imgUsuario" fitHeight="61.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../imagenes/avatar.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="lblNombre" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="118.0" textAlignment="CENTER" textFill="#d5d8dc">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+         </children></Pane>
+      <Pane layoutX="118.0" prefHeight="572.0" prefWidth="200.0" style="-fx-background-color: #212f3d;">
          <children>
             <TextField fx:id="txtBuscar" layoutX="13.0" layoutY="14.0" prefHeight="30.0" prefWidth="174.0" promptText="Buscar" style="-fx-background-color: #2c3e50; -fx-text-fill: #d5d8dc;">
                <font>
@@ -20,12 +40,12 @@
             <ListView fx:id="listaAmigos" layoutY="56.0" prefHeight="516.0" prefWidth="200.0" style="-fx-background-color: #d5d8dc;" />
          </children>
       </Pane>
-      <TextField fx:id="txtMensaje" layoutX="264.0" layoutY="535.0" prefHeight="36.0" prefWidth="294.0" promptText="Escribe un mensaje" style="-fx-background-color: #808b96; -fx-text-fill: #d5d8dc;">
+      <TextField fx:id="txtMensaje" layoutX="318.0" layoutY="529.0" prefHeight="43.0" prefWidth="294.0" promptText="Escribe un mensaje" style="-fx-background-color: #808b96; -fx-text-fill: #d5d8dc;">
          <font>
             <Font size="14.0" />
          </font>
       </TextField>
-      <Button fx:id="btnEnviar" defaultButton="true" disable="true" layoutX="559.0" layoutY="535.0" mnemonicParsing="false" onAction="#enviarMensaje" prefHeight="36.0" prefWidth="82.0" style="-fx-background-color: BLACK;" text="Enviar" textFill="#dac5c5">
+      <Button fx:id="btnEnviar" defaultButton="true" disable="true" layoutX="612.0" layoutY="529.0" mnemonicParsing="false" onAction="#enviarMensaje" prefHeight="43.0" prefWidth="85.0" style="-fx-background-color: BLACK;" text="Enviar" textFill="#dac5c5">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>

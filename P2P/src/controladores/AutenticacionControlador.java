@@ -22,6 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import p2p.ClienteImpl;
+import p2p.ClienteInterfaz;
 
 /**
  * FXML Controller class
@@ -39,7 +40,7 @@ public class AutenticacionControlador implements Initializable {
     @FXML
     private Button btnIniciarSesion;
 
-    private ClienteImpl c;
+    private ClienteInterfaz c;
 
     /**
      * Initializes the controller class.
@@ -56,7 +57,7 @@ public class AutenticacionControlador implements Initializable {
 
     }
 
-    public void inicializarAtributos(ClienteImpl c) {
+    public void inicializarAtributos(ClienteInterfaz c) {
         this.c = c;
     }
 
@@ -122,8 +123,8 @@ public class AutenticacionControlador implements Initializable {
             // Cargo el scene
             Scene scene = new Scene(ventana);
             Stage stage = new Stage();
-            //VClienteController controlador = loader.getController();
-
+            VClienteController controlador = loader.getController();
+            controlador.inicializarAtributos(c, this.txtUsuario.getText());
             // Seteo la scene y la muestro
             stage.setScene(scene);
             stage.setTitle("Chat");

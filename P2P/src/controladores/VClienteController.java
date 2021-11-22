@@ -12,9 +12,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import p2p.ClienteImpl;
+import p2p.ClienteInterfaz;
 
 /**
  * FXML Controller class
@@ -31,8 +34,13 @@ public class VClienteController implements Initializable {
     private Button btnEnviar;
     @FXML
     private ListView<?> listaAmigos;
+    @FXML
+    private ImageView imgUsuario;
+    @FXML
+    private Label lblNombre;
     
-    private ClienteImpl c;
+    private ClienteInterfaz c;
+    
     
 
     /**
@@ -46,11 +54,12 @@ public class VClienteController implements Initializable {
         // asocia el estado del botón con el estado de los text fields
         BooleanBinding botonDeshabilitado = txtMensaje.textProperty().isEmpty();
         btnEnviar.disableProperty().bind(botonDeshabilitado);
-        System.out.println("Hola");
+        
     }
 
-    public void inicializarAtributos(ClienteImpl c) {
+    public void inicializarAtributos(ClienteInterfaz c, String usuario) {
         this.c = c;
+        this.lblNombre.setText(usuario);
     }
 
     @FXML
