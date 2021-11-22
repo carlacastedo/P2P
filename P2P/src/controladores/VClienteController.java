@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import p2p.Cliente;
+import p2p.ClienteImpl;
 
 /**
  * FXML Controller class
@@ -32,7 +32,7 @@ public class VClienteController implements Initializable {
     @FXML
     private ListView<?> listaAmigos;
     
-    private Cliente c;
+    private ClienteImpl c;
     
 
     /**
@@ -49,7 +49,7 @@ public class VClienteController implements Initializable {
         System.out.println("Hola");
     }
 
-    public void inicializarAtributos(Cliente c) {
+    public void inicializarAtributos(ClienteImpl c) {
         this.c = c;
     }
 

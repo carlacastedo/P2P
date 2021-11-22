@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +21,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import p2p.Cliente;
+import p2p.ClienteImpl;
 
 /**
  * FXML Controller class
@@ -41,7 +39,7 @@ public class AutenticacionControlador implements Initializable {
     @FXML
     private Button btnIniciarSesion;
 
-    private Cliente c;
+    private ClienteImpl c;
 
     /**
      * Initializes the controller class.
@@ -58,7 +56,7 @@ public class AutenticacionControlador implements Initializable {
 
     }
 
-    public void inicializarAtributos(Cliente c) {
+    public void inicializarAtributos(ClienteImpl c) {
         this.c = c;
     }
 

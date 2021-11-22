@@ -18,8 +18,8 @@ import java.rmi.registry.Registry;
  *
  * @author ASUS
  */
-public class Servidor {
-
+public class Servidor{
+     
     public static void main(String args[]) {
         InputStreamReader is = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(is);
@@ -35,10 +35,10 @@ public class Servidor {
             int RMIPortNum = Integer.parseInt(portNum);
             //Se crea un registro(en caso de que no exista previamente)
             startRegistry(RMIPortNum);
-            P2PImpl exportedObj = new P2PImpl();
+            ServidorImpl exportedObj = new ServidorImpl();
             registryURL = "rmi://" + nombreHost + ":" + RMIPortNum + "/p2p";
             //Se enlaza el objeto con el registro
-            Naming.rebind(registryURL, exportedObj);
+             Naming.rebind(registryURL, exportedObj);
             listRegistry(registryURL);
             //Imprimimos que el servidor está listo para su funcionamiento
             System.out.println("Servidor P2P listo");

@@ -5,9 +5,11 @@ import java.rmi.*;
 /*
     Interfaz remota para 
  */
-public interface P2PInterface extends Remote {
-    
-    public Boolean existeUsuario(String usuario, String contraseña) throws java.rmi.RemoteException;
+public interface ServidorInterfaz extends Remote {
+
+    public void registrarCliente(ClienteInterfaz cliente) throws java.rmi.RemoteException;
+
+    public void quitarCliente(ClienteInterfaz cliente) throws java.rmi.RemoteException;
 
     public String consultarUsuarios() throws java.rmi.RemoteException;
 
@@ -27,4 +29,5 @@ public interface P2PInterface extends Remote {
 
     public void modificarContraseña(String usuario, String contraseña) throws java.rmi.RemoteException;
 
+    public Boolean existeUsuario(String usuario, String contraseña) throws java.rmi.RemoteException;
 }

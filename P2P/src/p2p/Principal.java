@@ -19,10 +19,10 @@ import javafx.stage.Stage;
  */
 public class Principal extends Application {
 
-    private static Cliente cliente;
+    private static ClienteImpl cliente;
 
     public static void main(String[] args) {
-        cliente = new Cliente("localhost", 1500);
+        cliente = new ClienteImpl("localhost", 1500);
         launch(args);
     }
 

@@ -7,8 +7,6 @@ package p2p;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
 import java.util.Properties;
 
@@ -16,11 +14,11 @@ import java.util.Properties;
  *
  * @author basesdatos
  */
-public class P2PImpl extends UnicastRemoteObject implements P2PInterface {
+public class BBDD {
 
     private Connection conexion;
 
-    public P2PImpl() throws RemoteException {
+    public BBDD() {
         super();
         Properties configuracion = new Properties();
         FileInputStream arqConfiguracion;
@@ -48,7 +46,6 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface {
         }
     }
 
-    @Override
     public String consultarUsuarios() {
         Connection con = this.conexion;
         PreparedStatement stmUsuarios = null;
@@ -75,7 +72,6 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface {
         return texto;
     }
 
-    @Override
     public void consultarAmigos(String usuario) {
         Connection con = this.conexion;
 
@@ -98,7 +94,6 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface {
         }
     }
 
-    @Override
     public void consultarSolicitudes(String solicitado) {
         Connection con = this.conexion;
 
@@ -116,7 +111,6 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface {
         }
     }
 
-    @Override
     public void insertarUsuario(String usuario, String contraseña) {
         Connection con = this.conexion;
 
@@ -131,7 +125,6 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface {
         }
     }
 
-    @Override
     public void enviarSolicitud(String solicitante, String solicitado) {
         Connection con = this.conexion;
 
@@ -147,7 +140,6 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface {
         }
     }
 
-    @Override
     public void aceptarSolicitud(String solicitante, String solicitado) {
         Connection con = this.conexion;
 
@@ -163,7 +155,6 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface {
         }
     }
 
-    @Override
     public void denegarSolicitud(String solicitante, String solicitado) {
         Connection con = this.conexion;
 
@@ -179,7 +170,6 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface {
         }
     }
 
-    @Override
     public void eliminarAmigo(String solicitante, String solicitado) {
         Connection con = this.conexion;
 
@@ -195,7 +185,6 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface {
         }
     }
 
-    @Override
     public void modificarContraseña(String usuario, String contraseña) {
         Connection con = this.conexion;
 
@@ -211,7 +200,6 @@ public class P2PImpl extends UnicastRemoteObject implements P2PInterface {
 
     }
 
-    @Override
     public Boolean existeUsuario(String usuario, String contraseña) throws java.rmi.RemoteException{
         Boolean existe = false;
         Connection con = this.conexion;
