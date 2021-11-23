@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package p2p;
+package p2p.cliente;
 
+import p2p.servidor.ServidorInterfaz;
 import controladores.AutenticacionControlador;
 import controladores.VClienteController;
 import java.io.IOException;

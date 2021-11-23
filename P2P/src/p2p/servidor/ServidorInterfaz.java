@@ -1,7 +1,8 @@
-package p2p;
+package p2p.servidor;
 
 import java.rmi.*;
 import java.util.ArrayList;
+import p2p.cliente.ClienteInterfaz;
 
 /*
     Interfaz remota para 

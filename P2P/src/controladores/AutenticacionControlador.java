@@ -20,7 +20,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import p2p.Cliente;
+import p2p.cliente.Cliente;
 
 /**
  * FXML Controller class
@@ -72,7 +72,7 @@ public class AutenticacionControlador implements Initializable {
                 a.setContentText("Usuario creado");
                 a.showAndWait();
                 //abrimos la ventana de los clientes
-                VClienteController controlador=abrirVentanaCliente();
+                VClienteController controlador = abrirVentanaCliente();
                 //cerramos la ventana de autenticacion
                 Stage myStage = (Stage) this.txtUsuario.getScene().getWindow();
                 myStage.close();
@@ -89,26 +89,27 @@ public class AutenticacionControlador implements Initializable {
 
     @FXML
     private void iniciarSesion(ActionEvent event) {
-        try {if (this.c.existeUsuario(this.txtUsuario.getText(), this.txtContraseña.getText())) {
-            
+        try {
+            if (this.c.existeUsuario(this.txtUsuario.getText(), this.txtContraseña.getText())) {
+
                 //abrimos la ventana del cliente
-                VClienteController controlador=abrirVentanaCliente();
+                VClienteController controlador = abrirVentanaCliente();
                 //cerramos la ventana de autenticacion
                 Stage myStage = (Stage) this.txtUsuario.getScene().getWindow();
                 myStage.close();
-                c.registrarCliente(this.txtUsuario.getText(),controlador);
+                c.registrarCliente(this.txtUsuario.getText(), controlador);
             } else {
                 Alert a = new Alert(Alert.AlertType.ERROR);
                 a.setContentText("Autenticacion incorrecta");
                 a.showAndWait();
             }
-        }catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     private VClienteController abrirVentanaCliente() throws IOException {
-        VClienteController controlador=null;
+        VClienteController controlador = null;
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/ventanas/VCliente.fxml"));
@@ -118,7 +119,7 @@ public class AutenticacionControlador implements Initializable {
             Scene scene = new Scene(ventana);
             Stage stage = new Stage();
             controlador = loader.getController();
-            controlador.inicializarAtributos(c,this.txtUsuario.getText());
+            controlador.inicializarAtributos(c, this.txtUsuario.getText());
             // Seteo la scene y la muestro
             stage.setScene(scene);
             stage.setTitle("Chat");
