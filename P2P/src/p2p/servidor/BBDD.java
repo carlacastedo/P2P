@@ -75,7 +75,7 @@ public class BBDD {
 
     public ArrayList<String> consultarAmigos(String usuario) {
         Connection con = this.conexion;
-        ArrayList<String> amigos=new ArrayList<>();
+        ArrayList<String> amigos = new ArrayList<>();
 
         String consulta = "select solicitante from solicitar_amistad "
                 + "where solicitado=? and estado='aceptado' "
@@ -94,11 +94,12 @@ public class BBDD {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        
+
         return amigos;
     }
 
-    public void consultarSolicitudes(String solicitado) {
+    public ArrayList<String> consultarSolicitudes(String solicitado) {
+        ArrayList<String> solicitudes = new ArrayList<>();
         Connection con = this.conexion;
 
         String consulta = "select solicitante from solicitar_amistad "
@@ -107,12 +108,13 @@ public class BBDD {
             stmUsuario.setString(1, solicitado);
             try (ResultSet rsUsuario = stmUsuario.executeQuery()) {
                 while (rsUsuario.next()) {
-                    System.out.println(rsUsuario.getString("solicitante"));
+                    solicitudes.add(rsUsuario.getString("solicitante"));
                 }
             }
         } catch (SQLException e) {
             System.err.println(consulta + "\n" + e.getMessage());
         }
+        return solicitudes;
     }
 
     public void insertarUsuario(String usuario, String contraseña) {
@@ -204,7 +206,7 @@ public class BBDD {
 
     }
 
-    public Boolean existeUsuario(String usuario, String contraseña) throws java.rmi.RemoteException{
+    public Boolean existeUsuario(String usuario, String contraseña) throws java.rmi.RemoteException {
         Boolean existe = false;
         Connection con = this.conexion;
 
