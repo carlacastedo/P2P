@@ -31,7 +31,7 @@ public class ClienteImpl extends UnicastRemoteObject implements ClienteInterfaz 
 
     @Override
     public void notificar(String amigo) throws java.rmi.RemoteException {
-        //this.controlador.modificarLista(amigo);
+        this.controlador.modificarLista(amigo);
         System.out.println(amigo);
     }
     
