@@ -8,6 +8,7 @@ package p2p.cliente;
 import controladores.VClienteController;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 /**
  *
@@ -31,10 +32,14 @@ public class ClienteImpl extends UnicastRemoteObject implements ClienteInterfaz 
 
     @Override
     public void notificar(String amigo) throws java.rmi.RemoteException {
-        this.controlador.modificarLista(amigo);
+        //this.controlador.modificarLista(amigo);
+        
         System.out.println(amigo);
     }
-    
-    
 
+    @Override
+    public void verSolicitudes(ArrayList<String> solicitudes) throws RemoteException {
+        this.controlador.verSolicitudes(solicitudes);
+    }
+    
 }

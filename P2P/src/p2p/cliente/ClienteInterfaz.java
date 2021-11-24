@@ -6,6 +6,7 @@
 package p2p.cliente;
 
 import java.rmi.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,4 +17,6 @@ public interface ClienteInterfaz extends Remote {
     public String getNombreCliente() throws java.rmi.RemoteException;
 
     public void notificar(String amigo) throws java.rmi.RemoteException;
+    
+    public void verSolicitudes(ArrayList<String> solicitudes) throws java.rmi.RemoteException;
 }
