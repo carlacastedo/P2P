@@ -29,10 +29,9 @@ public class Cliente extends Application {
 
     private static ClienteInterfaz cliente;
     private static ServidorInterfaz servidor;
-    
 
     public static void main(String[] args) {
-        
+
         try {
             String host = "localhost";
             String puerto = "1500";
@@ -66,17 +65,39 @@ public class Cliente extends Application {
         }
     }
     
-    public Boolean existeUsuario(String usuario, String contraseña) throws RemoteException{
+    //metodo que se ejecuta al cerrar el cliente
+    @Override 
+    public void stop(){
+        try {
+            servidor.quitarCliente(cliente);
+        } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public Boolean existeUsuario(String usuario, String contraseña) throws RemoteException {
         return servidor.existeUsuario(usuario, contraseña);
     }
-    
-    public void insertarUsuario(String usuario, String contraseña) throws RemoteException{
-        servidor.insertarUsuario(usuario,contraseña);
+
+    public void insertarUsuario(String usuario, String contraseña) throws RemoteException {
+        servidor.insertarUsuario(usuario, contraseña);
     }
-    
-    public void registrarCliente(String nombre,VClienteController controlador) throws RemoteException{
-        cliente = new ClienteImpl(nombre,controlador);
+
+    public void registrarCliente(String nombre, VClienteController controlador) throws RemoteException {
+        cliente = new ClienteImpl(nombre, controlador);
         servidor.registrarCliente(cliente);
+    }
+
+    public void aceptarSolicitud(String amigo) throws RemoteException {
+        servidor.aceptarSolicitud(amigo, cliente.getNombreCliente());
+    }
+
+    public void denegarSolicitud(String amigo, String solicitado) throws RemoteException {
+        servidor.denegarSolicitud(amigo, solicitado);
+    }
+
+    public void enviarMensaje(String amigo, String mensaje) {
+        //implementar
     }
 
 }
