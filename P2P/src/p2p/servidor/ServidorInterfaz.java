@@ -4,9 +4,7 @@ import java.rmi.*;
 import java.util.ArrayList;
 import p2p.cliente.ClienteInterfaz;
 
-/*
-    Interfaz remota para 
- */
+
 public interface ServidorInterfaz extends Remote {
 
     public void registrarCliente(ClienteInterfaz cliente) throws java.rmi.RemoteException;
@@ -17,7 +15,7 @@ public interface ServidorInterfaz extends Remote {
 
     public ArrayList<String> consultarAmigos(String usuario) throws java.rmi.RemoteException;
 
-    public void consultarSolicitudes(String solicitado) throws java.rmi.RemoteException;
+    public ArrayList<String> consultarSolicitudes(String solicitado) throws java.rmi.RemoteException;
 
     public void insertarUsuario(String usuario, String contraseña) throws java.rmi.RemoteException;
 

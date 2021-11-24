@@ -31,6 +31,9 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
             clientes.add(cliente);
             System.out.println("Nuevo cliente registrado");
             notificarAmigos(cliente.getNombreCliente());
+            
+            //buscamos las solicitudes pendientes
+            cliente.verSolicitudes(this.baseDatos.consultarSolicitudes(cliente.getNombreCliente()));
         }
     }
 
@@ -44,7 +47,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     }
 
     private synchronized void notificarAmigos(String nombre) throws java.rmi.RemoteException {
-        ArrayList<String> amigos=consultarAmigos(nombre);
+        ArrayList<String> amigos = consultarAmigos(nombre);
         // make callback to each registered client
         System.out.println("**************************************\n Callbacks initiated ---");
         for (int i = 0; i < clientes.size(); i++) {
@@ -52,10 +55,10 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
             System.out.println("doing " + i + "-th callback\n");
             // convert the vector object to a callback object
             ClienteInterfaz cliente = (ClienteInterfaz) clientes.get(i);
-            if(amigos.contains(cliente.getNombreCliente())){
+            if (amigos.contains(cliente.getNombreCliente())) {
                 cliente.notificar(nombre);
             }
-            
+
         }// end for
         System.out.println("********************************\n Server completed callbacks ---");
     }
@@ -71,8 +74,8 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     }
 
     @Override
-    public void consultarSolicitudes(String solicitado) throws RemoteException {
-        this.baseDatos.consultarSolicitudes(solicitado);
+    public ArrayList<String> consultarSolicitudes(String solicitado) throws RemoteException {
+        return this.baseDatos.consultarSolicitudes(solicitado);
     }
 
     @Override
