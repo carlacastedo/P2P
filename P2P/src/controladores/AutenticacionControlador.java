@@ -91,7 +91,6 @@ public class AutenticacionControlador implements Initializable {
     private void iniciarSesion(ActionEvent event) {
         try {
             if (this.c.existeUsuario(this.txtUsuario.getText(), this.txtContraseña.getText())) {
-
                 //abrimos la ventana del cliente
                 VClienteController controlador = abrirVentanaCliente();
                 //cerramos la ventana de autenticacion
