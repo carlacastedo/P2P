@@ -6,6 +6,8 @@
 package controladores;
 
 import java.net.URL;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
@@ -16,10 +18,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import p2p.cliente.Cliente;
 
 /**
@@ -42,16 +44,19 @@ public class VClienteController implements Initializable {
     @FXML
     private Label lblNombre;
     @FXML
-    private TabPane tabPane;
-    @FXML
-    private Tab tabAmigos;
-    @FXML
-    private Tab tabSolicitudes;
-    @FXML
     private ListView<String> listaSolicitudes;
-    
-    private Cliente c;
+    @FXML
+    private Label lblSolicitudes;
+    @FXML
+    private TextArea txtChat;
+    @FXML
+    private Button btnDenegar;
+    @FXML
+    private Button btnAceptar;
+    @FXML
+    private Label lblDestinatario;
 
+    private Cliente c;
     /**
      * Initializes the controller class.
      *
@@ -61,10 +66,9 @@ public class VClienteController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // asocia el estado del botón con el estado de los text fields
-        BooleanBinding botonDeshabilitado = txtMensaje.textProperty().isEmpty();
-        btnEnviar.disableProperty().bind(botonDeshabilitado);
-        //iniciarListas();
-
+        BooleanBinding botonEnviar = txtMensaje.textProperty().isEmpty();
+        btnEnviar.disableProperty().bind(botonEnviar);
+        iniciarListas();
     }
 
     public void inicializarAtributos(Cliente c, String usuario) {
@@ -74,13 +78,14 @@ public class VClienteController implements Initializable {
 
     @FXML
     private void enviarMensaje(ActionEvent event) {
-
+        this.txtChat.setText(this.txtChat.getText() + "\n" + this.txtMensaje.getText());
+        //this.c.enviarMensaje(this.lblDestinatario.getText(), this.txtMensaje.getText());
+        this.txtMensaje.setText("");
     }
 
-    public void modificarLista(String amigo) {
-        this.listaAmigos.getItems().add(amigo);
-    }
-
+//    public void modificarLista(String amigo) {
+//        this.listaAmigos.getItems().add(amigo);
+//    }
     private void iniciarListas() {
         ObservableList listaListView = FXCollections.observableArrayList();
         ObservableList listaListView2 = FXCollections.observableArrayList();
@@ -93,7 +98,7 @@ public class VClienteController implements Initializable {
 
         //Asocia unos elemenos determiandos a la lista
         listaAmigos.setItems(listaListView);
-        listaSolicitudes.setItems(listaListView2);
+        //listaSolicitudes.setItems(listaListView2);
         /*
         // obtiene el elemento seleccionado en la posición indicada
         listaAmigos.getSelectionModel().select(0);
@@ -119,4 +124,42 @@ public class VClienteController implements Initializable {
          */
     }
 
+    @FXML
+    private void denegarSolicitud(MouseEvent event) {
+        try {
+            String solicitante = this.listaSolicitudes.getSelectionModel().getSelectedItem();
+            c.denegarSolicitud(solicitante, this.lblNombre.getText());
+            this.listaSolicitudes.getItems().remove(solicitante);
+        } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    @FXML
+    private void aceptarSolicitud(MouseEvent event) {
+        String solicitante = this.listaSolicitudes.getSelectionModel().getSelectedItem();
+        try {
+            c.aceptarSolicitud(solicitante);
+            this.listaSolicitudes.getItems().remove(solicitante);
+        } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    @FXML
+    private void abrirChat(MouseEvent event) {
+        this.lblDestinatario.setText(this.listaAmigos.getSelectionModel().getSelectedItem());
+    }
+
+    //metodo que coloca las solicitudes en la listView
+    public void verSolicitudes(ArrayList<String> solicitudes) {
+        ObservableList sol = FXCollections.observableArrayList();
+        for (String s : solicitudes) {
+            sol.add(s);
+            System.out.println(s);
+        }
+        this.listaSolicitudes.setItems(sol);
+    }
+
+    
 }
