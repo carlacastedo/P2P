@@ -62,7 +62,6 @@ public class AutenticacionControlador implements Initializable {
     @FXML
     private void registrarUsuario(ActionEvent event) {
         //comprobamos si el usuario existe o no en el sistema
-
         try {
             if (!this.c.existeUsuario(this.txtUsuario.getText(), this.txtContraseña.getText())) {
                 //creamos el usuario en la base de datos

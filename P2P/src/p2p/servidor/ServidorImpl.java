@@ -8,6 +8,7 @@ package p2p.servidor;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import p2p.cliente.ClienteInterfaz;
 
 /**
@@ -16,36 +17,29 @@ import p2p.cliente.ClienteInterfaz;
  */
 public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfaz {
 
-    private ArrayList<ClienteInterfaz> clientes;
+    private HashMap<String, ClienteInterfaz> clientes;
     private BBDD baseDatos;
 
     public ServidorImpl() throws RemoteException {
         super();
-        this.clientes = new ArrayList<>();
+        this.clientes = new HashMap<>();
         this.baseDatos = new BBDD();
     }
 
     @Override
     public synchronized void registrarCliente(ClienteInterfaz cliente) throws java.rmi.RemoteException {
-        if (!(clientes.contains(cliente))) {
-            clientes.add(cliente);
-            System.out.println("Un cliente ha iniciado sesion");
-            
-            ArrayList<String> amigos = this.baseDatos.consultarAmigos(cliente.getNombreCliente());
-            ArrayList<String> clientesConectados = new ArrayList<>();
-            ArrayList<String> amigosConectados = new ArrayList<>();
+        if (!(clientes.containsValue(cliente))) {
+            clientes.put(cliente.getNombreCliente(), cliente);
+            System.out.println(cliente.getNombreCliente() + " ha iniciado sesion");
 
-            for (ClienteInterfaz ci : clientes) {
-                clientesConectados.add(ci.getNombreCliente());
-            }
-            
-            System.out.println(clientesConectados);
+            ArrayList<String> amigos = this.baseDatos.consultarAmigos(cliente.getNombreCliente());
+            ArrayList<String> amigosConectados = new ArrayList<>();
             
             //comprobamos los amigos que estan conectados
             for (String a : amigos) {
-                if (clientesConectados.contains(a)) {
+                if (clientes.keySet().contains(a)) {
                     amigosConectados.add(a);
-                    System.out.println(a + " esta conectado");
+                    this.clientes.get(a).notificar(cliente.getNombreCliente()+ " esta en linea", "conexion");
                 }
             }
             
@@ -59,10 +53,10 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 
     @Override
     public synchronized void quitarCliente(ClienteInterfaz cliente) throws java.rmi.RemoteException {
-        if (clientes.remove(cliente)) {
-            System.out.println("Cliente se fue");
+        if (clientes.remove(cliente.getNombreCliente()) != null) {
+            System.out.println(cliente.getNombreCliente() + " ha cerrado sesion");
         } else {
-            System.out.println("unregister: client wasn't registered.");
+            System.out.println("el cliente no habia iniciado sesion");
         }
     }
 
@@ -83,7 +77,6 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 //        }// end for
 //        System.out.println("********************************\n Server completed callbacks ---");
 //    }
-
     @Override
     public String consultarUsuarios() throws RemoteException {
         return this.baseDatos.consultarUsuarios();
@@ -136,7 +129,16 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 
     @Override
     public ArrayList<String> filtrarAmigos(String filtro, String nombreCliente) throws RemoteException {
-        return this.baseDatos.filtrarAmigos(nombreCliente, filtro);
+        ArrayList<String> amigos = this.baseDatos.filtrarAmigos(nombreCliente, filtro);
+        ArrayList<String> amigosConectados = new ArrayList<>();
+
+        //comprobamos los amigos que estan conectados
+        for (String a : amigos) {
+            if (clientes.keySet().contains(a)) {
+                amigosConectados.add(a);
+            }
+        }
+        return amigosConectados;
     }
 
 }

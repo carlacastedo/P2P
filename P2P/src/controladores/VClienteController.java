@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -64,10 +65,10 @@ public class VClienteController implements Initializable {
     private Label lblDestinatario;
     @FXML
     private Button btnModificarContrasena;
-    
-    private Cliente c;
     @FXML
     private Button btnSolicitarAmistad;
+    
+    private Cliente c;
 
     /**
      * Initializes the controller class.
@@ -142,8 +143,12 @@ public class VClienteController implements Initializable {
         this.listaSolicitudes.setItems(sol);
     }
 
-    public void conectarAmigo(String amigo) {
-        this.listaAmigos.getItems().add(amigo);
+    public void recibirNotificacion(String mensaje, String tipo) {
+//        Alert notificacion = new Alert(Alert.AlertType.INFORMATION);
+//        notificacion.setTitle("Notificacion de " + tipo);
+//        notificacion.setContentText(mensaje);
+//        notificacion.showAndWait();
+        System.out.println(mensaje);
     }
 
     //metodo que coloca las solicitudes en la listView
