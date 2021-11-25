@@ -39,6 +39,8 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
                 clientesConectados.add(ci.getNombreCliente());
             }
             
+            System.out.println(clientesConectados);
+            
             //comprobamos los amigos que estan conectados
             for (String a : amigos) {
                 if (clientesConectados.contains(a)) {
@@ -46,6 +48,8 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
                     System.out.println(a + " esta conectado");
                 }
             }
+            
+            System.out.println(amigosConectados);
             cliente.verAmigos(amigosConectados);
 
             //buscamos las solicitudes pendientes
