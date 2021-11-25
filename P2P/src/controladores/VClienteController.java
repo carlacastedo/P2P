@@ -162,7 +162,7 @@ public class VClienteController implements Initializable {
             sol.add(s);
             System.out.println(s);
         }
-        this.listaSolicitudes.setItems(sol);
+        this.listaSolicitudes.setItems(sol);   
     }
 
     //metodo que coloca las solicitudes en la listView
