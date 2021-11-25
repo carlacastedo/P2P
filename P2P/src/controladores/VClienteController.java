@@ -9,8 +9,6 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -72,7 +70,7 @@ public class VClienteController implements Initializable {
         // asocia el estado del botón con el estado de los text fields
         BooleanBinding botonEnviar = txtMensaje.textProperty().isEmpty();
         btnEnviar.disableProperty().bind(botonEnviar);
-        iniciarListas();
+        //iniciarListas();
     }
 
     public void inicializarAtributos(Cliente c, String usuario) {
@@ -87,9 +85,6 @@ public class VClienteController implements Initializable {
         this.txtMensaje.setText("");
     }
 
-//    public void modificarLista(String amigo) {
-//        this.listaAmigos.getItems().add(amigo);
-//    }
     private void iniciarListas() {
         ObservableList listaListView = FXCollections.observableArrayList();
         ObservableList listaListView2 = FXCollections.observableArrayList();
@@ -155,6 +150,16 @@ public class VClienteController implements Initializable {
         this.lblDestinatario.setText(this.listaAmigos.getSelectionModel().getSelectedItem());
     }
 
+    @FXML
+    private void filtrarAmigos(KeyEvent event) {
+        try {
+            ArrayList<String> lista = this.c.filtrarAmigos(this.txtBuscar.getText());
+            this.actualizarAmigos(lista);
+        } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+    
     //metodo que coloca las solicitudes en la listView
     public void actualizarSolicitudes(ArrayList<String> solicitudes) {
         ObservableList sol = FXCollections.observableArrayList();
@@ -163,6 +168,10 @@ public class VClienteController implements Initializable {
             System.out.println(s);
         }
         this.listaSolicitudes.setItems(sol);   
+    }
+    
+    public void conectarAmigo(String amigo){
+        this.listaAmigos.getItems().add(amigo);
     }
 
     //metodo que coloca las solicitudes en la listView
@@ -174,15 +183,4 @@ public class VClienteController implements Initializable {
         }
         this.listaAmigos.setItems(sol);
     }
-
-    @FXML
-    private void filtrarAmigos(KeyEvent event) {
-        try {
-            ArrayList<String> lista = this.c.filtrarAmigos(this.txtBuscar.getText());
-            this.actualizarAmigos(lista);
-        } catch (RemoteException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-
 }

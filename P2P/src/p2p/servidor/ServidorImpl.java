@@ -31,7 +31,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
             clientes.add(cliente);
             System.out.println("Nuevo cliente registrado");
             notificarAmigos(cliente.getNombreCliente());
-            
+
             //buscamos las solicitudes pendientes
             cliente.verSolicitudes(this.baseDatos.consultarSolicitudes(cliente.getNombreCliente()));
         }
@@ -48,6 +48,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 
     private synchronized void notificarAmigos(String nombre) throws java.rmi.RemoteException {
         ArrayList<String> amigos = consultarAmigos(nombre);
+        System.out.println("amigos de " + nombre + ": " + amigos.toString());
         // make callback to each registered client
         System.out.println("**************************************\n Callbacks initiated ---");
         for (int i = 0; i < clientes.size(); i++) {
