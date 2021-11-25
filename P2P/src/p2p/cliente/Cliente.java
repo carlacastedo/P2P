@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -98,6 +99,10 @@ public class Cliente extends Application {
 
     public void enviarMensaje(String amigo, String mensaje) {
         //implementar
+    }
+
+    public ArrayList<String> filtrarAmigos(String filtro) throws RemoteException {
+        return servidor.filtrarAmigos(filtro, cliente.getNombreCliente());
     }
 
 }

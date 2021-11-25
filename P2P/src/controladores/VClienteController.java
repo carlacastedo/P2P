@@ -9,6 +9,8 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,6 +23,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import p2p.cliente.Cliente;
 
@@ -57,6 +60,7 @@ public class VClienteController implements Initializable {
     private Label lblDestinatario;
 
     private Cliente c;
+
     /**
      * Initializes the controller class.
      *
@@ -145,14 +149,14 @@ public class VClienteController implements Initializable {
             System.out.println(ex.getMessage());
         }
     }
-    
+
     @FXML
     private void abrirChat(MouseEvent event) {
         this.lblDestinatario.setText(this.listaAmigos.getSelectionModel().getSelectedItem());
     }
 
     //metodo que coloca las solicitudes en la listView
-    public void verSolicitudes(ArrayList<String> solicitudes) {
+    public void actualizarSolicitudes(ArrayList<String> solicitudes) {
         ObservableList sol = FXCollections.observableArrayList();
         for (String s : solicitudes) {
             sol.add(s);
@@ -161,5 +165,24 @@ public class VClienteController implements Initializable {
         this.listaSolicitudes.setItems(sol);
     }
 
-    
+    //metodo que coloca las solicitudes en la listView
+    public void actualizarAmigos(ArrayList<String> amigos) {
+        ObservableList sol = FXCollections.observableArrayList();
+        for (String a : amigos) {
+            sol.add(a);
+            System.out.println(a);
+        }
+        this.listaAmigos.setItems(sol);
+    }
+
+    @FXML
+    private void filtrarAmigos(KeyEvent event) {
+        try {
+            ArrayList<String> lista = this.c.filtrarAmigos(this.txtBuscar.getText());
+            this.actualizarAmigos(lista);
+        } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
 }

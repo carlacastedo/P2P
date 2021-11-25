@@ -113,4 +113,9 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         return this.baseDatos.existeUsuario(usuario, contraseña);
     }
 
+    @Override
+    public ArrayList<String> filtrarAmigos(String filtro, String nombreCliente) throws RemoteException {
+        return this.baseDatos.filtrarAmigos(nombreCliente, filtro);
+    }
+
 }

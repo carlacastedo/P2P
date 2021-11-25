@@ -39,7 +39,7 @@ public class ClienteImpl extends UnicastRemoteObject implements ClienteInterfaz 
 
     @Override
     public void verSolicitudes(ArrayList<String> solicitudes) throws RemoteException {
-        this.controlador.verSolicitudes(solicitudes);
+        this.controlador.actualizarSolicitudes(solicitudes);
     }
     
 }

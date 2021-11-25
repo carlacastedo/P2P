@@ -97,6 +97,31 @@ public class BBDD {
 
         return amigos;
     }
+    
+       public ArrayList<String> filtrarAmigos(String usuario, String filtro) {
+        ArrayList<String> amigos = new ArrayList<>();
+        String consulta = "select solicitante from solicitar_amistad "
+                + "where solicitado=? and LOWER(solicitante) like LOWER(?) and estado='aceptado' "
+                + "UNION "
+                + "select solicitado from solicitar_amistad "
+                + "where solicitante=? and LOWER(solicitado) like LOWER(?) and estado='aceptado' ";
+
+        try (PreparedStatement stmUsuario = conexion.prepareStatement(consulta)) {
+            stmUsuario.setString(1, usuario);
+            stmUsuario.setString(2, filtro + "%");
+            stmUsuario.setString(3, usuario);
+            stmUsuario.setString(4, filtro + "%");
+            try (ResultSet rsUsuario = stmUsuario.executeQuery()) {
+                while (rsUsuario.next()) {
+                    amigos.add(rsUsuario.getString("solicitante"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+
+        return amigos;
+    }
 
     public ArrayList<String> consultarSolicitudes(String solicitado) {
         ArrayList<String> solicitudes = new ArrayList<>();
