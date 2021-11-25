@@ -24,6 +24,7 @@ public class BBDD {
         Properties configuracion = new Properties();
         FileInputStream arqConfiguracion;
 
+        //creamos la conexion con la base de datos
         try {
             arqConfiguracion = new FileInputStream("baseDatos.properties");
             configuracion.load(arqConfiguracion);
@@ -48,13 +49,12 @@ public class BBDD {
     }
 
     public String consultarUsuarios() {
-        Connection con = this.conexion;
         PreparedStatement stmUsuarios = null;
         ResultSet rsUsuarios;
         String texto = "";
         String consulta = "select nombre from usuarios";
         try {
-            stmUsuarios = con.prepareStatement(consulta);
+            stmUsuarios = conexion.prepareStatement(consulta);
             rsUsuarios = stmUsuarios.executeQuery();
             while (rsUsuarios.next()) {
                 texto += rsUsuarios.getString("nombre");
@@ -73,17 +73,42 @@ public class BBDD {
         return texto;
     }
 
-    public ArrayList<String> consultarAmigos(String usuario) {
-        Connection con = this.conexion;
-        ArrayList<String> amigos = new ArrayList<>();
+    public ArrayList<String> consultarNoAmigos(String usuario) {
+        ArrayList<String> noAmigos = new ArrayList<>();
+        String consulta = "select nombre from usuarios "
+                + "EXCEPT "
+                + "(select solicitante from solicitar_amistad "
+                + "where solicitado=? and estado='aceptado' "
+                + "UNION "
+                + "select solicitado from solicitar_amistad "
+                + "where solicitante=? and estado='aceptado' "
+                + "UNION "
+                + "select nombre from usuarios "
+                + "where nombre=?)";
+        try (PreparedStatement stmUsuario = conexion.prepareStatement(consulta)) {
+            stmUsuario.setString(1, usuario);
+            stmUsuario.setString(2, usuario);
+            stmUsuario.setString(3, usuario);
+            try (ResultSet rsUsuario = stmUsuario.executeQuery()) {
+                while (rsUsuario.next()) {
+                    noAmigos.add(rsUsuario.getString("nombre"));
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return noAmigos;
+    }
 
+    public ArrayList<String> consultarAmigos(String usuario) {
+        ArrayList<String> amigos = new ArrayList<>();
         String consulta = "select solicitante from solicitar_amistad "
                 + "where solicitado=? and estado='aceptado' "
                 + "UNION "
                 + "select solicitado from solicitar_amistad "
                 + "where solicitante=? and estado='aceptado' ";
 
-        try (PreparedStatement stmUsuario = con.prepareStatement(consulta)) {
+        try (PreparedStatement stmUsuario = conexion.prepareStatement(consulta)) {
             stmUsuario.setString(1, usuario);
             stmUsuario.setString(2, usuario);
             try (ResultSet rsUsuario = stmUsuario.executeQuery()) {
@@ -94,11 +119,10 @@ public class BBDD {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-
         return amigos;
     }
-    
-       public ArrayList<String> filtrarAmigos(String usuario, String filtro) {
+
+    public ArrayList<String> filtrarAmigos(String usuario, String filtro) {
         ArrayList<String> amigos = new ArrayList<>();
         String consulta = "select solicitante from solicitar_amistad "
                 + "where solicitado=? and LOWER(solicitante) like LOWER(?) and estado='aceptado' "
@@ -123,13 +147,24 @@ public class BBDD {
         return amigos;
     }
 
+    public void insertarUsuario(String usuario, String contraseña) {
+        String consulta = "insert into usuarios(nombre, contraseña) "
+                + "values(?, ?)";
+        try (PreparedStatement stmUsuario = conexion.prepareStatement(consulta)) {
+            stmUsuario.setString(1, usuario);
+            stmUsuario.setString(2, contraseña);
+            stmUsuario.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
     public ArrayList<String> consultarSolicitudes(String solicitado) {
         ArrayList<String> solicitudes = new ArrayList<>();
-        Connection con = this.conexion;
-
         String consulta = "select solicitante from solicitar_amistad "
                 + "where solicitado=? and estado='pendiente'";
-        try (PreparedStatement stmUsuario = con.prepareStatement(consulta)) {
+
+        try (PreparedStatement stmUsuario = conexion.prepareStatement(consulta)) {
             stmUsuario.setString(1, solicitado);
             try (ResultSet rsUsuario = stmUsuario.executeQuery()) {
                 while (rsUsuario.next()) {
@@ -142,27 +177,11 @@ public class BBDD {
         return solicitudes;
     }
 
-    public void insertarUsuario(String usuario, String contraseña) {
-        Connection con = this.conexion;
-
-        String consulta = "insert into usuarios(nombre, contraseña) "
-                + "values(?, ?)";
-        try (PreparedStatement stmUsuario = con.prepareStatement(consulta)) {
-            stmUsuario.setString(1, usuario);
-            stmUsuario.setString(2, contraseña);
-            stmUsuario.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
     public void enviarSolicitud(String solicitante, String solicitado) {
-        Connection con = this.conexion;
-
         String consulta = "insert into solicitar_amistad(solicitante, solicitado, estado) "
                 + "values(?, ?, 'pendiente')";
 
-        try (PreparedStatement stmSolAmis = con.prepareStatement(consulta)) {
+        try (PreparedStatement stmSolAmis = conexion.prepareStatement(consulta)) {
             stmSolAmis.setString(1, solicitante);
             stmSolAmis.setString(2, solicitado);
             stmSolAmis.executeUpdate();
@@ -172,12 +191,10 @@ public class BBDD {
     }
 
     public void aceptarSolicitud(String solicitante, String solicitado) {
-        Connection con = this.conexion;
-
         String modificacion = "update solicitar_amistad set estado='aceptado' where solicitante=? and"
                 + " solicitado=?";
 
-        try (PreparedStatement stmSolAmis = con.prepareStatement(modificacion)) {
+        try (PreparedStatement stmSolAmis = conexion.prepareStatement(modificacion)) {
             stmSolAmis.setString(1, solicitante);
             stmSolAmis.setString(2, solicitado);
             stmSolAmis.executeUpdate();
@@ -187,12 +204,10 @@ public class BBDD {
     }
 
     public void denegarSolicitud(String solicitante, String solicitado) {
-        Connection con = this.conexion;
-
         String borrado = "delete from solicitar_amistad where solicitante=? and"
                 + " solicitado=? and estado='pendiente'";
 
-        try (PreparedStatement stmSolAmis = con.prepareStatement(borrado)) {
+        try (PreparedStatement stmSolAmis = conexion.prepareStatement(borrado)) {
             stmSolAmis.setString(1, solicitante);
             stmSolAmis.setString(2, solicitado);
             stmSolAmis.executeUpdate();
@@ -202,12 +217,10 @@ public class BBDD {
     }
 
     public void eliminarAmigo(String solicitante, String solicitado) {
-        Connection con = this.conexion;
-
         String insercion = "delete from solicitar_amistad where solicitante=? and"
                 + " solicitado=? and estado='aceptado'";
 
-        try (PreparedStatement stmSolAmis = con.prepareStatement(insercion)) {
+        try (PreparedStatement stmSolAmis = conexion.prepareStatement(insercion)) {
             stmSolAmis.setString(1, solicitante);
             stmSolAmis.setString(2, solicitado);
             stmSolAmis.executeUpdate();
@@ -217,11 +230,9 @@ public class BBDD {
     }
 
     public void modificarContraseña(String usuario, String contraseña) {
-        Connection con = this.conexion;
-
         String modificacion = "update usuarios set contraseña=? where nombre=?";
 
-        try (PreparedStatement stmSolAmis = con.prepareStatement(modificacion)) {
+        try (PreparedStatement stmSolAmis = conexion.prepareStatement(modificacion)) {
             stmSolAmis.setString(1, contraseña);
             stmSolAmis.setString(2, usuario);
             stmSolAmis.executeUpdate();
@@ -231,23 +242,21 @@ public class BBDD {
 
     }
 
-    public Boolean existeUsuario(String usuario, String contraseña) throws java.rmi.RemoteException {
-        Boolean existe = false;
-        Connection con = this.conexion;
-
+    public Boolean autenticarUsuario(String usuario, String contraseña) throws java.rmi.RemoteException {
+        Boolean autenticado = false;
         String consulta = "select from usuarios where nombre=? and contraseña=?";
 
-        try (PreparedStatement stmUsuario = con.prepareStatement(consulta)) {
+        try (PreparedStatement stmUsuario = conexion.prepareStatement(consulta)) {
             stmUsuario.setString(1, usuario);
             stmUsuario.setString(2, contraseña);
             try (ResultSet rsUsuario = stmUsuario.executeQuery()) {
                 if (rsUsuario.next()) {
-                    existe = true;
+                    autenticado = true;
                 }
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        return existe;
+        return autenticado;
     }
 }

@@ -69,8 +69,9 @@ public class VClienteController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // asocia el estado del botón con el estado de los text fields
         BooleanBinding botonEnviar = txtMensaje.textProperty().isEmpty();
+        BooleanBinding escribir = lblDestinatario.textProperty().isEmpty();
         btnEnviar.disableProperty().bind(botonEnviar);
-        //iniciarListas();
+        this.txtMensaje.disableProperty().bind(escribir);
     }
 
     public void inicializarAtributos(Cliente c, String usuario) {
@@ -83,44 +84,6 @@ public class VClienteController implements Initializable {
         this.txtChat.setText(this.txtChat.getText() + "\n" + this.txtMensaje.getText());
         //this.c.enviarMensaje(this.lblDestinatario.getText(), this.txtMensaje.getText());
         this.txtMensaje.setText("");
-    }
-
-    private void iniciarListas() {
-        ObservableList listaListView = FXCollections.observableArrayList();
-        ObservableList listaListView2 = FXCollections.observableArrayList();
-
-        listaListView.add("Maria");
-        listaListView.add("Juan");
-
-        listaListView2.add("Anton");
-        listaListView2.add("Sergio");
-
-        //Asocia unos elemenos determiandos a la lista
-        listaAmigos.setItems(listaListView);
-        //listaSolicitudes.setItems(listaListView2);
-        /*
-        // obtiene el elemento seleccionado en la posición indicada
-        listaAmigos.getSelectionModel().select(0);
-        // obtiene el elemento seleccioando
-        listaAmigos.getSelectionModel().getSelectedItem();
-        //obtiene el índice del elemento seleccionado
-        listaAmigos.getSelectionModel().getSelectedIndex();
-
-        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                Alumno alumno = (Alumno) newValue;
-                System.out.println("Seleccionado " + alumno.getNombre() + " " + alumno.getApellido());
-            }
-        });
-
-        // modifica el tipo de selección de la lista
-        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        //listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-        //Obtiene el elemento con el foco activo
-        listView.setTooltip(new Tooltip(((Alumno) listView.getFocusModel().getFocusedItem()).getNombre()));
-         */
     }
 
     @FXML
@@ -165,7 +128,6 @@ public class VClienteController implements Initializable {
         ObservableList sol = FXCollections.observableArrayList();
         for (String s : solicitudes) {
             sol.add(s);
-            System.out.println(s);
         }
         this.listaSolicitudes.setItems(sol);   
     }
@@ -179,7 +141,6 @@ public class VClienteController implements Initializable {
         ObservableList sol = FXCollections.observableArrayList();
         for (String a : amigos) {
             sol.add(a);
-            System.out.println(a);
         }
         this.listaAmigos.setItems(sol);
     }

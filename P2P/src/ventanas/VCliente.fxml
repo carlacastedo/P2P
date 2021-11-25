@@ -71,7 +71,7 @@
             </HBox>
          </children>
       </Pane>
-      <TextField fx:id="txtMensaje" layoutX="318.0" layoutY="529.0" prefHeight="43.0" prefWidth="294.0" promptText="Escribe un mensaje" style="-fx-background-color: #808b96; -fx-text-fill: #d5d8dc;" AnchorPane.bottomAnchor="0.0">
+      <TextField fx:id="txtMensaje" disable="true" layoutX="318.0" layoutY="529.0" prefHeight="43.0" prefWidth="294.0" promptText="Escribe un mensaje" style="-fx-background-color: #808b96; -fx-text-fill: #d5d8dc;" AnchorPane.bottomAnchor="0.0">
          <font>
             <Font size="14.0" />
          </font>

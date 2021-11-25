@@ -127,7 +127,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 
     @Override
     public Boolean existeUsuario(String usuario, String contraseña) throws RemoteException {
-        return this.baseDatos.existeUsuario(usuario, contraseña);
+        return this.baseDatos.autenticarUsuario(usuario, contraseña);
     }
 
     @Override
