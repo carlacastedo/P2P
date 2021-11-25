@@ -33,6 +33,16 @@
                   </Label>
                </children>
             </VBox>
+            <Button fx:id="btnModificarContrasena" alignment="CENTER" layoutX="16.0" layoutY="515.0" mnemonicParsing="false" onMouseClicked="#modificarContrasena" prefHeight="43.0" prefWidth="86.0" style="-fx-background-color: #808b96;" text="Modificar contraseña" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="btnSolicitarAmistad" alignment="CENTER" layoutX="16.0" layoutY="457.0" mnemonicParsing="false" onMouseClicked="#solicitarAmistad" prefHeight="43.0" prefWidth="86.0" style="-fx-background-color: #808b96;" text="Solicitar amistad" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
          </children></Pane>
       <Pane layoutX="118.0" prefHeight="572.0" prefWidth="200.0" style="-fx-background-color: #212f3d;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="118.0" AnchorPane.rightAnchor="379.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -42,14 +52,14 @@
                </font></TextField>
             <ListView fx:id="listaAmigos" layoutY="88.0" onMouseClicked="#abrirChat" prefHeight="236.0" prefWidth="200.0" style="-fx-background-color: #d5d8dc; -fx-font-size: 14;" />
             <ListView fx:id="listaSolicitudes" layoutY="361.0" prefHeight="169.0" prefWidth="200.0" style="-fx-background-color: #d5d8dc;" />
-            <Label fx:id="lblSolicitudes" alignment="CENTER" layoutY="333.0" prefHeight="21.0" prefWidth="200.0" text="Solicitudes" textFill="#c9c5c5">
+            <Label fx:id="lblSolicitudes" alignment="CENTER" layoutY="333.0" prefHeight="21.0" prefWidth="200.0" text="Solicitudes" textFill="#d1d5d4">
                <font>
-                  <Font size="15.0" />
+                  <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <Label alignment="CENTER" layoutY="13.0" prefHeight="30.0" prefWidth="200.0" text="Amigos" textFill="#ddd6d6">
+            <Label alignment="CENTER" layoutY="13.0" prefHeight="30.0" prefWidth="200.0" text="Amigos" textFill="#d1d5d4">
                <font>
-                  <Font size="15.0" />
+                  <Font name="System Bold" size="15.0" />
                </font>
             </Label>
             <HBox alignment="CENTER" layoutY="527.0" prefHeight="43.0" prefWidth="200.0" spacing="40.0">
@@ -71,7 +81,7 @@
             </HBox>
          </children>
       </Pane>
-      <TextField fx:id="txtMensaje" disable="true" layoutX="318.0" layoutY="529.0" prefHeight="43.0" prefWidth="294.0" promptText="Escribe un mensaje" style="-fx-background-color: #808b96; -fx-text-fill: #d5d8dc;" AnchorPane.bottomAnchor="0.0">
+      <TextField fx:id="txtMensaje" disable="true" layoutX="319.0" layoutY="529.0" prefHeight="43.0" prefWidth="292.0" promptText="Escribe un mensaje" style="-fx-background-color: #808b96; -fx-text-fill: #d5d8dc;" AnchorPane.bottomAnchor="0.0">
          <font>
             <Font size="14.0" />
          </font>

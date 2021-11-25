@@ -56,8 +56,12 @@ public class VClienteController implements Initializable {
     private Button btnAceptar;
     @FXML
     private Label lblDestinatario;
-
+    @FXML
+    private Button btnModificarContrasena;
+    
     private Cliente c;
+    @FXML
+    private Button btnSolicitarAmistad;
 
     /**
      * Initializes the controller class.
@@ -122,17 +126,17 @@ public class VClienteController implements Initializable {
             System.out.println(ex.getMessage());
         }
     }
-    
+
     //metodo que coloca las solicitudes en la listView
     public void actualizarSolicitudes(ArrayList<String> solicitudes) {
         ObservableList sol = FXCollections.observableArrayList();
         for (String s : solicitudes) {
             sol.add(s);
         }
-        this.listaSolicitudes.setItems(sol);   
+        this.listaSolicitudes.setItems(sol);
     }
-    
-    public void conectarAmigo(String amigo){
+
+    public void conectarAmigo(String amigo) {
         this.listaAmigos.getItems().add(amigo);
     }
 
@@ -143,5 +147,13 @@ public class VClienteController implements Initializable {
             sol.add(a);
         }
         this.listaAmigos.setItems(sol);
+    }
+
+    @FXML
+    private void modificarContrasena(MouseEvent event) {
+    }
+
+    @FXML
+    private void solicitarAmistad(MouseEvent event) {
     }
 }
