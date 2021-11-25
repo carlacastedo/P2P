@@ -40,7 +40,7 @@
                <font>
                   <Font name="Segoe UI" size="12.0" />
                </font></TextField>
-            <ListView fx:id="listaAmigos" layoutY="88.0" onMouseClicked="#abrirChat" prefHeight="236.0" prefWidth="200.0" style="-fx-background-color: #d5d8dc;" />
+            <ListView fx:id="listaAmigos" layoutY="88.0" onMouseClicked="#abrirChat" prefHeight="236.0" prefWidth="200.0" style="-fx-background-color: #d5d8dc; -fx-font-size: 14;" />
             <ListView fx:id="listaSolicitudes" layoutY="361.0" prefHeight="169.0" prefWidth="200.0" style="-fx-background-color: #d5d8dc;" />
             <Label fx:id="lblSolicitudes" alignment="CENTER" layoutY="333.0" prefHeight="21.0" prefWidth="200.0" text="Solicitudes" textFill="#c9c5c5">
                <font>

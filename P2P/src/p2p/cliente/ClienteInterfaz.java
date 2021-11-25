@@ -19,4 +19,6 @@ public interface ClienteInterfaz extends Remote {
     public void notificar(String amigo) throws java.rmi.RemoteException;
     
     public void verSolicitudes(ArrayList<String> solicitudes) throws java.rmi.RemoteException;
+
+    public void verAmigos(ArrayList<String> consultarAmigos)throws java.rmi.RemoteException;
 }
