@@ -12,6 +12,7 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -66,6 +67,16 @@ public class VModificarContrasenhaController implements Initializable {
                 cambiada = this.cliente.modificarContraseña(contrasenaAntigua, contrasenaNueva);
                 if(cambiada){
                     ((Stage) this.txtContrasenaActual.getScene().getWindow()).close();
+                }
+                if(!cambiada){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setHeaderText(null);
+                    alert.setTitle("Error");
+                    alert.setContentText("La contraseña actual introducida no es correcta");
+                    alert.showAndWait();
+                    this.txtContrasenaActual.setText("");
+                    this.txtContrasenaNueva.setText("");
+                    this.txtRepiteContrasena.setText("");
                 }
             } catch (RemoteException ex) {
                 System.out.println(ex.getMessage());

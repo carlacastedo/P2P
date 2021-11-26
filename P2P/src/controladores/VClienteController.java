@@ -161,7 +161,7 @@ public class VClienteController implements Initializable {
 
     @FXML
     private void modificarContrasena(MouseEvent event) {
-        VModificarContrasenhaController controlador = null;
+        VModificarContrasenhaController controlador;
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/ventanas/VModificarContrasenha.fxml"));
@@ -171,6 +171,7 @@ public class VClienteController implements Initializable {
             Scene scene = new Scene(ventana);
             Stage stage = new Stage();
             controlador = loader.getController();
+            controlador.inicializarAtributos(c);
             // Seteo la scene y la muestro
             stage.setScene(scene);
             stage.setTitle("Modificación Contraseña");

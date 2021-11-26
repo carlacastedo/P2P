@@ -42,7 +42,6 @@ public class ClienteImpl extends UnicastRemoteObject implements ClienteInterfaz 
 
     @Override
     public void verAmigos(ArrayList<String> amigos) throws RemoteException {
-        System.out.println("Cliente Impl "+amigos);
         this.controlador.actualizarAmigos(amigos);
     }
     
