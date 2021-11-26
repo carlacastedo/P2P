@@ -18,8 +18,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -68,7 +66,7 @@ public class VClienteController implements Initializable {
     private Button btnModificarContrasena;
     @FXML
     private Button btnSolicitarAmistad;
-    
+
     private Cliente c;
 
     /**
@@ -127,12 +125,12 @@ public class VClienteController implements Initializable {
 
     @FXML
     private void filtrarAmigos(KeyEvent event) {
-        /*try {
+        try {
             ArrayList<String> lista = this.c.filtrarAmigos(this.txtBuscar.getText());
             this.actualizarAmigos(lista);
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
-        }*/
+        }
     }
 
     //metodo que coloca las solicitudes en la listView

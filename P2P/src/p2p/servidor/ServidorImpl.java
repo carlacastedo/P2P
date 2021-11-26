@@ -34,15 +34,15 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 
             ArrayList<String> amigos = this.baseDatos.consultarAmigos(cliente.getNombreCliente());
             ArrayList<String> amigosConectados = new ArrayList<>();
-            
+
             //comprobamos los amigos que estan conectados
             for (String a : amigos) {
                 if (clientes.keySet().contains(a)) {
                     amigosConectados.add(a);
-                    this.clientes.get(a).notificar(cliente.getNombreCliente()+ " esta en linea", "conexion");
+                    this.clientes.get(a).notificar(cliente.getNombreCliente() + " esta en linea", "conexion");
                 }
             }
-            
+
             System.out.println(amigosConectados);
             cliente.verAmigos(amigosConectados);
 
@@ -118,8 +118,13 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     }
 
     @Override
-    public void modificarContraseña(String usuario, String contraseña) throws RemoteException {
-        this.baseDatos.modificarContraseña(usuario, contraseña);
+    public Boolean modificarContraseña(String usuario, String contrasenaAntigua, String contrasenaNueva) throws RemoteException {
+        if (this.existeUsuario(usuario, contrasenaAntigua)) {
+            this.baseDatos.modificarContraseña(usuario, contrasenaNueva);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

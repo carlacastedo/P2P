@@ -105,4 +105,8 @@ public class Cliente extends Application {
         return servidor.filtrarAmigos(filtro, cliente.getNombreCliente());
     }
 
+    public Boolean modificarContraseña(String contrasenaAntigua, String contrasenaNueva) throws RemoteException {
+        return servidor.modificarContraseña(cliente.getNombreCliente(), contrasenaAntigua, contrasenaNueva);
+    }
+
 }

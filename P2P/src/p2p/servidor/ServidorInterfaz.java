@@ -27,7 +27,7 @@ public interface ServidorInterfaz extends Remote {
 
     public void eliminarAmigo(String solicitante, String solicitado) throws java.rmi.RemoteException;
 
-    public void modificarContraseña(String usuario, String contraseña) throws java.rmi.RemoteException;
+    public Boolean modificarContraseña(String usuario, String contrasenaAntigua, String contrasenaNueva) throws java.rmi.RemoteException;
 
     public Boolean existeUsuario(String usuario, String contraseña) throws java.rmi.RemoteException;
 
