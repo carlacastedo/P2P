@@ -77,7 +77,7 @@ public class Cliente extends Application {
     }
 
     public Boolean existeUsuario(String usuario, String contraseña) throws RemoteException {
-        return servidor.existeUsuario(usuario, contraseña);
+        return servidor.autenticarUsuario(usuario, contraseña);
     }
 
     public void insertarUsuario(String usuario, String contraseña) throws RemoteException {

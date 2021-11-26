@@ -42,7 +42,9 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
                     this.clientes.get(a).notificar(cliente.getNombreCliente() + " esta en linea", "conexion");
                 }
             }
-
+            
+            //notificar a los amigos
+            
             System.out.println(amigosConectados);
             cliente.verAmigos(amigosConectados);
 
@@ -55,6 +57,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     public synchronized void quitarCliente(ClienteInterfaz cliente) throws java.rmi.RemoteException {
         if (clientes.remove(cliente.getNombreCliente()) != null) {
             System.out.println(cliente.getNombreCliente() + " ha cerrado sesion");
+            //desconectarlo de los amigos
         } else {
             System.out.println("el cliente no habia iniciado sesion");
         }
@@ -77,6 +80,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 //        }// end for
 //        System.out.println("********************************\n Server completed callbacks ---");
 //    }
+    
     @Override
     public String consultarUsuarios() throws RemoteException {
         return this.baseDatos.consultarUsuarios();
@@ -100,11 +104,18 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     @Override
     public void enviarSolicitud(String solicitante, String solicitado) throws RemoteException {
         this.baseDatos.enviarSolicitud(solicitante, solicitado);
+        if(this.clientes.get(solicitado)!=null){
+            this.clientes.get(solicitado).verSolicitudes(this.consultarSolicitudes(solicitado));
+        }
+        
     }
 
     @Override
     public void aceptarSolicitud(String solicitante, String solicitado) throws RemoteException {
         this.baseDatos.aceptarSolicitud(solicitante, solicitado);
+        if(this.clientes.get(solicitado)!=null){
+            this.clientes.get(solicitado).verAmigos(this.consultarAmigos(solicitado));
+        }
     }
 
     @Override
@@ -119,7 +130,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 
     @Override
     public Boolean modificarContraseña(String usuario, String contrasenaAntigua, String contrasenaNueva) throws RemoteException {
-        if (this.existeUsuario(usuario, contrasenaAntigua)) {
+        if (this.autenticarUsuario(usuario, contrasenaAntigua)) {
             this.baseDatos.modificarContraseña(usuario, contrasenaNueva);
             return true;
         } else {
@@ -128,7 +139,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     }
 
     @Override
-    public Boolean existeUsuario(String usuario, String contraseña) throws RemoteException {
+    public Boolean autenticarUsuario(String usuario, String contraseña) throws RemoteException {
         return this.baseDatos.autenticarUsuario(usuario, contraseña);
     }
 
