@@ -73,22 +73,25 @@ public class BBDD {
         return texto;
     }
 
-    public ArrayList<String> consultarNoAmigos(String usuario) {
+    public ArrayList<String> consultarNoAmigos(String usuario, String busqueda) {
         ArrayList<String> noAmigos = new ArrayList<>();
-        String consulta = "select nombre from usuarios "
+        String consulta = "select nombre from usuarios where LOWER(nombre) like LOWER(?) "
                 + "EXCEPT "
                 + "(select solicitante from solicitar_amistad "
-                + "where solicitado=? and estado='aceptado' "
+                + "where solicitado=? and LOWER(solicitante) like LOWER(?) "
                 + "UNION "
                 + "select solicitado from solicitar_amistad "
-                + "where solicitante=? and estado='aceptado' "
+                + "where solicitante=? and LOWER(solicitado) like LOWER(?) "
                 + "UNION "
                 + "select nombre from usuarios "
                 + "where nombre=?)";
         try (PreparedStatement stmUsuario = conexion.prepareStatement(consulta)) {
-            stmUsuario.setString(1, usuario);
+            stmUsuario.setString(1, busqueda + "%");
             stmUsuario.setString(2, usuario);
-            stmUsuario.setString(3, usuario);
+            stmUsuario.setString(3, busqueda + "%");
+            stmUsuario.setString(4, usuario);
+            stmUsuario.setString(5, busqueda + "%");
+            stmUsuario.setString(6, usuario);
             try (ResultSet rsUsuario = stmUsuario.executeQuery()) {
                 while (rsUsuario.next()) {
                     noAmigos.add(rsUsuario.getString("nombre"));

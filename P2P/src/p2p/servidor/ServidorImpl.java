@@ -146,4 +146,9 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         return amigosConectados;
     }
 
+    @Override
+    public ArrayList<String> consultarNoAmigos(String nombreCliente, String busqueda) throws RemoteException {
+        return this.baseDatos.consultarNoAmigos(nombreCliente, busqueda);
+    }
+
 }

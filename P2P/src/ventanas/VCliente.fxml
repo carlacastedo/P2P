@@ -52,7 +52,7 @@
                </font></TextField>
             <ListView fx:id="listaAmigos" layoutY="88.0" onMouseClicked="#abrirChat" prefHeight="236.0" prefWidth="200.0" style="-fx-background-color: #d5d8dc; -fx-font-size: 14;" />
             <ListView fx:id="listaSolicitudes" layoutY="361.0" prefHeight="169.0" prefWidth="200.0" style="-fx-background-color: #d5d8dc;" />
-            <Label fx:id="lblSolicitudes" alignment="CENTER" layoutY="333.0" prefHeight="21.0" prefWidth="200.0" text="Solicitudes" textFill="#d1d5d4">
+            <Label fx:id="lblSolicitudes" alignment="CENTER" layoutY="333.0" prefHeight="21.0" prefWidth="200.0" text="Solicitudes pendientes" textFill="#d1d5d4">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>

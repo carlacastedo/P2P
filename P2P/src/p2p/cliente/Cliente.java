@@ -109,4 +109,12 @@ public class Cliente extends Application {
         return servidor.modificarContraseña(cliente.getNombreCliente(), contrasenaAntigua, contrasenaNueva);
     }
 
+    public ArrayList<String> consultarNoAmigos(String busqueda) throws RemoteException {
+        return servidor.consultarNoAmigos(cliente.getNombreCliente(), busqueda);
+    }
+
+    public void solicitarAmistad(String solicitado) throws RemoteException {
+        servidor.enviarSolicitud(cliente.getNombreCliente(), solicitado);
+    }
+
 }

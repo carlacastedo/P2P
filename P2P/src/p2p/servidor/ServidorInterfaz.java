@@ -32,4 +32,6 @@ public interface ServidorInterfaz extends Remote {
     public Boolean existeUsuario(String usuario, String contraseña) throws java.rmi.RemoteException;
 
     public ArrayList<String> filtrarAmigos(String filtro, String nombreCliente) throws java.rmi.RemoteException;
+
+    public ArrayList<String> consultarNoAmigos(String nombreCliente, String busqueda)throws java.rmi.RemoteException;
 }
