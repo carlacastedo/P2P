@@ -70,7 +70,7 @@ public class VSolicitarController implements Initializable {
             if (busqueda.length() >= 2) {
                 usuarios = this.cliente.consultarNoAmigos(busqueda);
                 this.actualizarUsuarios(usuarios);
-            }else if(busqueda.length()==0){
+            } else if (busqueda.length() == 0) {
                 this.listaUsuarios.getItems().clear();
             }
         } catch (RemoteException ex) {
