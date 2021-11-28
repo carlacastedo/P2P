@@ -26,13 +26,8 @@ public class ClienteImpl extends UnicastRemoteObject implements ClienteInterfaz 
     }
 
     @Override
-    public String getNombreCliente()  throws java.rmi.RemoteException{
+    public String getNombreCliente() throws java.rmi.RemoteException {
         return nombreCliente;
-    }
-
-    @Override
-    public void notificar(String mensaje, String tipo) throws java.rmi.RemoteException {
-        this.controlador.recibirNotificacion(mensaje, tipo);
     }
 
     @Override
@@ -44,5 +39,20 @@ public class ClienteImpl extends UnicastRemoteObject implements ClienteInterfaz 
     public void verAmigos(ArrayList<String> amigos) throws RemoteException {
         this.controlador.actualizarAmigos(amigos);
     }
-    
+
+    @Override
+    public void recibirMensaje(String mensaje) throws RemoteException {
+        this.controlador.recibirMensaje(mensaje, mensaje);
+    }
+
+    @Override
+    public void conectarAmigo(String amigo) throws java.rmi.RemoteException {
+        this.controlador.conectarAmigo(amigo);
+    }
+
+    @Override
+    public void desconectarAmigo(String amigo) throws java.rmi.RemoteException {
+        this.controlador.desconectarAmigo(amigo);
+    }
+
 }

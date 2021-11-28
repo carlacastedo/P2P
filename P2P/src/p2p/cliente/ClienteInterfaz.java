@@ -16,9 +16,14 @@ public interface ClienteInterfaz extends Remote {
 
     public String getNombreCliente() throws java.rmi.RemoteException;
 
-    public void notificar(String mensaje, String tipo) throws java.rmi.RemoteException;
-    
+    public void conectarAmigo(String amigo) throws java.rmi.RemoteException;
+
+    public void desconectarAmigo(String nombreCliente) throws java.rmi.RemoteException;
+
     public void verSolicitudes(ArrayList<String> solicitudes) throws java.rmi.RemoteException;
 
-    public void verAmigos(ArrayList<String> amigos)throws java.rmi.RemoteException;
+    public void verAmigos(ArrayList<String> amigos) throws java.rmi.RemoteException;
+
+    public void recibirMensaje(String mensaje) throws java.rmi.RemoteException;
+
 }

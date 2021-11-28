@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
@@ -37,7 +38,7 @@ import p2p.cliente.Cliente;
  * @author ASUS
  */
 public class VClienteController implements Initializable {
-
+    
     @FXML
     private TextField txtBuscar;
     @FXML
@@ -66,8 +67,10 @@ public class VClienteController implements Initializable {
     private Button btnModificarContrasena;
     @FXML
     private Button btnSolicitarAmistad;
-
+    
     private Cliente c;
+    
+    private HashMap<String, String> chats;
 
     /**
      * Initializes the controller class.
@@ -82,20 +85,30 @@ public class VClienteController implements Initializable {
         BooleanBinding escribir = lblDestinatario.textProperty().isEmpty();
         btnEnviar.disableProperty().bind(botonEnviar);
         this.txtMensaje.disableProperty().bind(escribir);
+        ObservableList sol = FXCollections.observableArrayList();
+        listaAmigos.setItems(sol);
+        listaSolicitudes.setItems(sol);
+        this.chats = new HashMap<>();
     }
-
+    
     public void inicializarAtributos(Cliente c, String usuario) {
         this.c = c;
         this.lblNombre.setText(usuario);
     }
-
+    
     @FXML
     private void enviarMensaje(ActionEvent event) {
-        this.txtChat.setText(this.txtChat.getText() + "\n" + this.txtMensaje.getText());
-        //this.c.enviarMensaje(this.lblDestinatario.getText(), this.txtMensaje.getText());
+        String conversacion = this.txtChat.getText();
+        //añadimos el mensaje al chat que ya tenemos
+        conversacion = "Tu: " + this.txtMensaje.getText() + "\n";
+        //lo guardamos en los chats
+        this.chats.put(this.lblDestinatario.getText(), conversacion);
+        //mostramos en la pantalla de mensajes
+        this.txtChat.setText(conversacion);
+        //vaciamos el txtMensaje
         this.txtMensaje.setText("");
     }
-
+    
     @FXML
     private void denegarSolicitud(MouseEvent event) {
         try {
@@ -106,7 +119,7 @@ public class VClienteController implements Initializable {
             System.out.println(ex.getMessage());
         }
     }
-
+    
     @FXML
     private void aceptarSolicitud(MouseEvent event) {
         String solicitante = this.listaSolicitudes.getSelectionModel().getSelectedItem();
@@ -117,12 +130,14 @@ public class VClienteController implements Initializable {
             System.out.println(ex.getMessage());
         }
     }
-
+    
     @FXML
     private void abrirChat(MouseEvent event) {
-        this.lblDestinatario.setText(this.listaAmigos.getSelectionModel().getSelectedItem());
+        String destinatario = this.listaAmigos.getSelectionModel().getSelectedItem();
+        this.lblDestinatario.setText(destinatario);
+        this.txtChat.setText(this.chats.get(destinatario));
     }
-
+    
     @FXML
     private void filtrarAmigos(KeyEvent event) {
         try {
@@ -142,29 +157,24 @@ public class VClienteController implements Initializable {
         this.listaSolicitudes.setItems(sol);
     }
 
-    public void recibirNotificacion(String mensaje, String tipo) {
-//        Alert notificacion = new Alert(Alert.AlertType.INFORMATION);
-//        notificacion.setTitle("Notificacion de " + tipo);
-//        notificacion.setContentText(mensaje);
-//        notificacion.showAndWait();
-        System.out.println(mensaje);
-    }
-
-    //metodo que coloca las solicitudes en la listView
+    //metodo que coloca los amigos conecados en la listView
     public void actualizarAmigos(ArrayList<String> amigos) {
         ObservableList sol = FXCollections.observableArrayList();
         for (String a : amigos) {
             sol.add(a);
+            if (!this.chats.containsKey(a)) {
+                this.chats.put(a, "");
+            }
         }
         this.listaAmigos.setItems(sol);
     }
-
+    
     @FXML
     private void modificarContrasena(MouseEvent event) {
-        VModificarContrasenhaController controlador;
+        VModificarContrasenaController controlador;
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/ventanas/VModificarContrasenha.fxml"));
+            loader.setLocation(getClass().getResource("/ventanas/VModificarContrasena.fxml"));
             // Cargo la ventana
             Pane ventana = (Pane) loader.load();
             // Cargo el scene
@@ -182,7 +192,7 @@ public class VClienteController implements Initializable {
             System.out.println(e.getMessage());
         }
     }
-
+    
     @FXML
     private void solicitarAmistad(MouseEvent event) {
         VSolicitarController controlador = null;
@@ -205,5 +215,24 @@ public class VClienteController implements Initializable {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+    
+    public void recibirMensaje(String mensaje, String emisor) {
+        String conversacion = this.chats.get(emisor) + emisor + ": " + mensaje + "\n";
+        this.chats.put(emisor, conversacion);
+    }
+    
+    public void conectarAmigo(String amigo) {
+//        ObservableList sol = this.listaAmigos.getItems();
+//        sol.add(amigo);
+//        this.listaAmigos.setItems(sol);
+//        this.chats.put(amigo, "");
+    }
+    
+    public void desconectarAmigo(String amigo) {
+//        ObservableList sol = this.listaAmigos.getItems();
+//        sol.remove(amigo);
+//        this.listaAmigos.setItems(sol);
+//        this.chats.remove(amigo);
     }
 }

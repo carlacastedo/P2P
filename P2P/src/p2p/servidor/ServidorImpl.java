@@ -39,13 +39,12 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
             for (String a : amigos) {
                 if (clientes.keySet().contains(a)) {
                     amigosConectados.add(a);
-                    this.clientes.get(a).notificar(cliente.getNombreCliente() + " esta en linea", "conexion");
+                    //notificamos de la conexion a sus amigos
+                    this.clientes.get(a).conectarAmigo(cliente.getNombreCliente());
                 }
             }
-            
-            //notificar a los amigos
-            
-            System.out.println(amigosConectados);
+
+            //ver los amigos que estan conectados en el momento
             cliente.verAmigos(amigosConectados);
 
             //buscamos las solicitudes pendientes
@@ -58,8 +57,20 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         if (clientes.remove(cliente.getNombreCliente()) != null) {
             System.out.println(cliente.getNombreCliente() + " ha cerrado sesion");
             //desconectarlo de los amigos
+            ArrayList<String> amigos = this.baseDatos.consultarAmigos(cliente.getNombreCliente());
+            ArrayList<String> amigosConectados = new ArrayList<>();
+
+            //comprobamos los amigos que estan conectados
+            for (String a : amigos) {
+                if (clientes.keySet().contains(a)) {
+                    amigosConectados.add(a);
+                    //notificamos de la conexion a sus amigos
+                    this.clientes.get(a).desconectarAmigo(cliente.getNombreCliente());
+                }
+            }
+
         } else {
-            System.out.println("el cliente no habia iniciado sesion");
+            System.out.println("El cliente no habia iniciado sesion");
         }
     }
 
@@ -74,13 +85,12 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 //            // convert the vector object to a callback object
 //            ClienteInterfaz cliente = (ClienteInterfaz) clientes.get(i);
 //            if (amigos.contains(cliente.getNombreCliente())) {
-//                cliente.notificar(nombre);
+//                cliente.conectarAmigo(nombre);
 //            }
 //
 //        }// end for
 //        System.out.println("********************************\n Server completed callbacks ---");
 //    }
-    
     @Override
     public String consultarUsuarios() throws RemoteException {
         return this.baseDatos.consultarUsuarios();
@@ -104,16 +114,15 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     @Override
     public void enviarSolicitud(String solicitante, String solicitado) throws RemoteException {
         this.baseDatos.enviarSolicitud(solicitante, solicitado);
-        if(this.clientes.get(solicitado)!=null){
+        if (this.clientes.get(solicitado) != null) {
             this.clientes.get(solicitado).verSolicitudes(this.consultarSolicitudes(solicitado));
         }
-        
     }
 
     @Override
     public void aceptarSolicitud(String solicitante, String solicitado) throws RemoteException {
         this.baseDatos.aceptarSolicitud(solicitante, solicitado);
-        if(this.clientes.get(solicitado)!=null){
+        if (this.clientes.get(solicitado) != null) {
             this.clientes.get(solicitado).verAmigos(this.consultarAmigos(solicitado));
         }
     }
