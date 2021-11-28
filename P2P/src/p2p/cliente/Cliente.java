@@ -5,10 +5,11 @@
  */
 package p2p.cliente;
 
-import controladores.AutenticacionControlador;
+import controladores.VAutenticacionController;
 import p2p.servidor.ServidorInterfaz;
 import controladores.VClienteController;
 import java.io.IOException;
+import static java.lang.System.exit;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -48,12 +49,12 @@ public class Cliente extends Application {
     public void start(Stage stage) throws Exception {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/ventanas/VentanaAutenticacion.fxml"));
+            loader.setLocation(getClass().getResource("/ventanas/VAutenticacion.fxml"));
             // Cargo la ventana
             Pane ventana = (Pane) loader.load();
             // Cargo el scene
             Scene scene = new Scene(ventana);
-            AutenticacionControlador controlador = loader.getController();
+            VAutenticacionController controlador = loader.getController();
             controlador.inicializarAtributos(this);
 
             // Seteo la scene y la muestro
@@ -71,6 +72,7 @@ public class Cliente extends Application {
     public void stop(){
         try {
             servidor.quitarCliente(cliente);
+            exit(0);
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
         }
