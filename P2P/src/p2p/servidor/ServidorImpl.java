@@ -111,8 +111,10 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 
     @Override
     public void enviarSolicitud(String solicitante, String solicitado) throws RemoteException {
-        this.baseDatos.enviarSolicitud(solicitante, solicitado);
-        if (this.clientes.get(solicitado) != null) {
+        
+        if (this.clientes.get(solicitado) != null && !solicitado.equals(solicitante)) {
+            //metemos la solicitud en la base de datos
+            this.baseDatos.enviarSolicitud(solicitante, solicitado);
             //mostramos las solicitudes en la interfaz del solicitado
             this.clientes.get(solicitado).verSolicitudes(this.consultarSolicitudes(solicitado));
         }
