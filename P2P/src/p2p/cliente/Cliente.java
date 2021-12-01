@@ -71,7 +71,7 @@ public class Cliente extends Application {
     @Override 
     public void stop(){
         try {
-            servidor.quitarCliente(cliente);
+            servidor.cerrarSesion(cliente);
             exit(0);
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
@@ -88,7 +88,7 @@ public class Cliente extends Application {
 
     public void registrarCliente(String nombre, VClienteController controlador) throws RemoteException {
         cliente = new ClienteImpl(nombre, controlador);
-        servidor.registrarCliente(cliente);
+        servidor.iniciarSesion(cliente);
     }
 
     public void aceptarSolicitud(String amigo) throws RemoteException {
