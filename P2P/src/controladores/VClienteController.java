@@ -38,7 +38,7 @@ import p2p.cliente.Cliente;
  * @author ASUS
  */
 public class VClienteController implements Initializable {
-    
+
     @FXML
     private TextField txtBuscar;
     @FXML
@@ -67,9 +67,13 @@ public class VClienteController implements Initializable {
     private Button btnModificarContrasena;
     @FXML
     private Button btnSolicitarAmistad;
-    
+    @FXML
+    private Label lblEnLinea;
+    @FXML
+    private Label lblDesconectado;
+
     private Cliente c;
-    
+
     private HashMap<String, String> chats;
 
     /**
@@ -85,17 +89,14 @@ public class VClienteController implements Initializable {
         BooleanBinding escribir = lblDestinatario.textProperty().isEmpty();
         btnEnviar.disableProperty().bind(botonEnviar);
         this.txtMensaje.disableProperty().bind(escribir);
-        ObservableList sol = FXCollections.observableArrayList();
-        listaAmigos.setItems(sol);
-        listaSolicitudes.setItems(sol);
         this.chats = new HashMap<>();
     }
-    
+
     public void inicializarAtributos(Cliente c, String usuario) {
         this.c = c;
         this.lblNombre.setText(usuario);
     }
-    
+
     @FXML
     private void enviarMensaje(ActionEvent event) {
         String conversacion = this.txtChat.getText();
@@ -108,7 +109,7 @@ public class VClienteController implements Initializable {
         //vaciamos el txtMensaje
         this.txtMensaje.setText("");
     }
-    
+
     @FXML
     private void denegarSolicitud(MouseEvent event) {
         try {
@@ -119,7 +120,7 @@ public class VClienteController implements Initializable {
             System.out.println(ex.getMessage());
         }
     }
-    
+
     @FXML
     private void aceptarSolicitud(MouseEvent event) {
         String solicitante = this.listaSolicitudes.getSelectionModel().getSelectedItem();
@@ -130,14 +131,27 @@ public class VClienteController implements Initializable {
             System.out.println(ex.getMessage());
         }
     }
-    
+
     @FXML
     private void abrirChat(MouseEvent event) {
         String destinatario = this.listaAmigos.getSelectionModel().getSelectedItem();
         this.lblDestinatario.setText(destinatario);
-        this.txtChat.setText(this.chats.get(destinatario));
+        //comprobamos si el amigo esta conectado o no
+        if (this.chats.containsKey(destinatario)) {
+            //si esta conectado podremos escribir
+            this.txtMensaje.setEditable(true);
+            this.lblDesconectado.setVisible(false);
+            this.lblEnLinea.setVisible(true);
+            this.txtChat.setText(this.chats.get(destinatario));
+        } else {
+            //si no esta conectado no podemos escribir
+            this.lblEnLinea.setVisible(false);
+            this.lblDesconectado.setVisible(true);
+            this.txtChat.setText("Tu amigo no se encuentra en linea");
+            this.txtMensaje.setEditable(false);
+        }
     }
-    
+
     @FXML
     private void filtrarAmigos(KeyEvent event) {
         try {
@@ -157,11 +171,14 @@ public class VClienteController implements Initializable {
         this.listaSolicitudes.setItems(sol);
     }
 
-    //metodo que coloca los amigos conecados en la listView
-    public void actualizarAmigos(ArrayList<String> amigos) {
+    //metodo que coloca los amigos en la listView y los conectados en el HashMap de chats
+    public void inicializarAmigos(ArrayList<String> amigos, ArrayList<String> amigosConectados) {
         ObservableList sol = FXCollections.observableArrayList();
         for (String a : amigos) {
             sol.add(a);
+        }
+        
+        for (String a : amigosConectados) {
             if (!this.chats.containsKey(a)) {
                 this.chats.put(a, "");
             }
@@ -169,6 +186,15 @@ public class VClienteController implements Initializable {
         this.listaAmigos.setItems(sol);
     }
     
+    //metodo que coloca los amigos conecados en la listView
+    public void actualizarAmigos(ArrayList<String> amigos) {
+        ObservableList sol = FXCollections.observableArrayList();
+        for (String a : amigos) {
+            sol.add(a);
+        }
+        this.listaAmigos.setItems(sol);
+    }
+
     @FXML
     private void modificarContrasena(MouseEvent event) {
         VModificarContrasenaController controlador;
@@ -192,7 +218,7 @@ public class VClienteController implements Initializable {
             System.out.println(e.getMessage());
         }
     }
-    
+
     @FXML
     private void solicitarAmistad(MouseEvent event) {
         VSolicitarController controlador = null;
@@ -216,23 +242,29 @@ public class VClienteController implements Initializable {
             System.out.println(e.getMessage());
         }
     }
-    
+
     public void recibirMensaje(String mensaje, String emisor) {
         String conversacion = this.chats.get(emisor) + emisor + ": " + mensaje + "\n";
         this.chats.put(emisor, conversacion);
     }
-    
+
     public void conectarAmigo(String amigo) {
-//        ObservableList sol = this.listaAmigos.getItems();
-//        sol.add(amigo);
-//        this.listaAmigos.setItems(sol);
-//        this.chats.put(amigo, "");
+        this.chats.put(amigo, "");
+        if(this.listaAmigos.getSelectionModel().getSelectedItem().equals(amigo)){
+            this.lblDesconectado.setVisible(false);
+            this.lblEnLinea.setVisible(true);
+            this.txtMensaje.setEditable(true);
+            this.txtChat.setText(this.chats.get(amigo));
+        }
     }
-    
+
     public void desconectarAmigo(String amigo) {
-//        ObservableList sol = this.listaAmigos.getItems();
-//        sol.remove(amigo);
-//        this.listaAmigos.setItems(sol);
-//        this.chats.remove(amigo);
+        this.chats.remove(amigo);
+        if(this.listaAmigos.getSelectionModel().getSelectedItem().equals(amigo)){
+            this.lblDesconectado.setVisible(true);
+            this.lblEnLinea.setVisible(false);
+            this.txtChat.setText("Tu amigo no se encuentra en linea");
+            this.txtMensaje.setEditable(false);
+        }
     }
 }

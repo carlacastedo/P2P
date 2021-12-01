@@ -22,7 +22,7 @@ public interface ClienteInterfaz extends Remote {
 
     public void verSolicitudes(ArrayList<String> solicitudes) throws java.rmi.RemoteException;
 
-    public void verAmigos(ArrayList<String> amigos) throws java.rmi.RemoteException;
+    public void verAmigos(ArrayList<String> amigos, ArrayList<String> amigosConectados) throws java.rmi.RemoteException;
 
     public void recibirMensaje(String mensaje) throws java.rmi.RemoteException;
 

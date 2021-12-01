@@ -44,8 +44,8 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
                 }
             }
 
-            //ver los amigos que estan conectados en el momento
-            cliente.verAmigos(amigosConectados);
+            //ver todos los amigos y los que estan conectados en el momento
+            cliente.verAmigos(amigos, amigosConectados);
 
             //buscamos las solicitudes pendientes
             cliente.verSolicitudes(this.baseDatos.consultarSolicitudes(cliente.getNombreCliente()));
@@ -74,23 +74,6 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         }
     }
 
-//    private synchronized void notificarAmigos(String nombre) throws java.rmi.RemoteException {
-//        ArrayList<String> amigos = consultarAmigos(nombre);
-//        System.out.println("amigos de " + nombre + ": " + amigos.toString());
-//        // make callback to each registered client
-//        System.out.println("**************************************\n Callbacks initiated ---");
-//        for (int i = 0; i < clientes.size(); i++) {
-//            //this.consultarAmigos(clientes.);
-//            System.out.println("doing " + i + "-th callback\n");
-//            // convert the vector object to a callback object
-//            ClienteInterfaz cliente = (ClienteInterfaz) clientes.get(i);
-//            if (amigos.contains(cliente.getNombreCliente())) {
-//                cliente.conectarAmigo(nombre);
-//            }
-//
-//        }// end for
-//        System.out.println("********************************\n Server completed callbacks ---");
-//    }
     @Override
     public String consultarUsuarios() throws RemoteException {
         return this.baseDatos.consultarUsuarios();
@@ -123,7 +106,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     public void aceptarSolicitud(String solicitante, String solicitado) throws RemoteException {
         this.baseDatos.aceptarSolicitud(solicitante, solicitado);
         if (this.clientes.get(solicitado) != null) {
-            this.clientes.get(solicitado).verAmigos(this.consultarAmigos(solicitado));
+            this.clientes.get(solicitado).verAmigos(this.consultarAmigos(solicitado), null);
         }
     }
 
@@ -154,16 +137,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 
     @Override
     public ArrayList<String> filtrarAmigos(String filtro, String nombreCliente) throws RemoteException {
-        ArrayList<String> amigos = this.baseDatos.filtrarAmigos(nombreCliente, filtro);
-        ArrayList<String> amigosConectados = new ArrayList<>();
-
-        //comprobamos los amigos que estan conectados
-        for (String a : amigos) {
-            if (clientes.keySet().contains(a)) {
-                amigosConectados.add(a);
-            }
-        }
-        return amigosConectados;
+        return this.baseDatos.filtrarAmigos(nombreCliente, filtro);
     }
 
     @Override

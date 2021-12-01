@@ -119,4 +119,7 @@ public class Cliente extends Application {
         servidor.enviarSolicitud(cliente.getNombreCliente(), solicitado);
     }
 
+    public ArrayList<String> consultarAmigos(String usuario) throws RemoteException {
+        return servidor.consultarAmigos(usuario);
+    }
 }
