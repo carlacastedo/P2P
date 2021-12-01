@@ -45,8 +45,8 @@ public class ClienteImpl extends UnicastRemoteObject implements ClienteInterfaz 
     }
 
     @Override
-    public void recibirMensaje(String mensaje) throws RemoteException {
-        this.controlador.recibirMensaje(mensaje, mensaje);
+    public void recibirMensaje(String mensaje, String amigo) throws RemoteException {
+        this.controlador.recibirMensaje(mensaje, amigo);
     }
 
     @Override

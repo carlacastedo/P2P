@@ -100,8 +100,9 @@ public class Cliente extends Application {
         servidor.denegarSolicitud(amigo, solicitado);
     }
 
-    public void enviarMensaje(String amigo, String mensaje) {
-        //implementar
+    public void enviarMensaje(String amigo, String mensaje) throws RemoteException {
+        ClienteInterfaz a=servidor.solicitarInterfaz(amigo);
+        a.recibirMensaje(mensaje,cliente.getNombreCliente());
     }
 
     public ArrayList<String> filtrarAmigos(String filtro) throws RemoteException {

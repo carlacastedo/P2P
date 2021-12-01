@@ -44,4 +44,7 @@ public interface ServidorInterfaz extends Remote {
 
     public void eliminarAmigo(String solicitante, String solicitado) throws java.rmi.RemoteException;
 
+    //metodo que devuelve la interfaz remota de un amigo conectado
+    public ClienteInterfaz solicitarInterfaz(String amigo) throws java.rmi.RemoteException;
+
 }
