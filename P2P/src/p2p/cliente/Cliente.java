@@ -15,11 +15,10 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -39,12 +38,14 @@ public class Cliente extends Application {
             String puerto = "1500";
             String registryURL = "rmi://" + host + ":" + puerto + "/p2p";
             servidor = (ServidorInterfaz) Naming.lookup(registryURL);
+            //iniciamos la aplicacion con ventanas
             launch(args);
         } catch (NotBoundException | MalformedURLException | RemoteException ex) {
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
         }
     }
 
+    //metodo que se ejecuta al iniciar la aplicacion con ventanas
     @Override
     public void start(Stage stage) throws Exception {
         try {
@@ -56,7 +57,7 @@ public class Cliente extends Application {
             Scene scene = new Scene(ventana);
             VAutenticacionController controlador = loader.getController();
             controlador.inicializarAtributos(this);
-
+            stage.getIcons().add(new Image("/imagenes/chatIcono.png"));
             // Seteo la scene y la muestro
             stage.setScene(scene);
             stage.setTitle("Autenticacion");

@@ -24,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -99,26 +100,18 @@ public class VClienteController implements Initializable {
 
     @FXML
     private void enviarMensaje(ActionEvent event) {
-        String conversacion = this.txtChat.getText();
+        String nuevoMensaje = "Tu: " + this.txtMensaje.getText() + "\n";
+        //mostramos en la pantalla de mensajes
+        this.txtChat.appendText(nuevoMensaje);
         //añadimos el mensaje al chat que ya tenemos
-        conversacion = "Tu: " + this.txtMensaje.getText() + "\n";
+        String conversacion =  this.txtChat.getText();
         //lo guardamos en los chats
         this.chats.put(this.lblDestinatario.getText(), conversacion);
-        //mostramos en la pantalla de mensajes
-        this.txtChat.setText(conversacion);
+        //enviamos el mensaje a nuestro amigo
+        this.c.enviarMensaje(conversacion, this.txtMensaje.getText());
         //vaciamos el txtMensaje
         this.txtMensaje.setText("");
-    }
-
-    @FXML
-    private void denegarSolicitud(MouseEvent event) {
-        try {
-            String solicitante = this.listaSolicitudes.getSelectionModel().getSelectedItem();
-            c.denegarSolicitud(solicitante, this.lblNombre.getText());
-            this.listaSolicitudes.getItems().remove(solicitante);
-        } catch (RemoteException ex) {
-            System.out.println(ex.getMessage());
-        }
+        
     }
 
     @FXML
@@ -126,6 +119,7 @@ public class VClienteController implements Initializable {
         String solicitante = this.listaSolicitudes.getSelectionModel().getSelectedItem();
         try {
             c.aceptarSolicitud(solicitante);
+            //eliminamos la solicitud de la lista
             this.listaSolicitudes.getItems().remove(solicitante);
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
@@ -133,6 +127,18 @@ public class VClienteController implements Initializable {
     }
 
     @FXML
+    private void denegarSolicitud(MouseEvent event) {
+        try {
+            String solicitante = this.listaSolicitudes.getSelectionModel().getSelectedItem();
+            c.denegarSolicitud(solicitante, this.lblNombre.getText());
+            //eliminamos la solicitud de la lista
+            this.listaSolicitudes.getItems().remove(solicitante);
+        } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    @FXML//metodo que coloca los mensajes con un amigo en la ventana del chat
     private void abrirChat(MouseEvent event) {
         String destinatario = this.listaAmigos.getSelectionModel().getSelectedItem();
         this.lblDestinatario.setText(destinatario);
@@ -174,10 +180,11 @@ public class VClienteController implements Initializable {
     //metodo que coloca los amigos en la listView y los conectados en el HashMap de chats
     public void inicializarAmigos(ArrayList<String> amigos, ArrayList<String> amigosConectados) {
         ObservableList sol = FXCollections.observableArrayList();
+        //añadimos todos a la lista
         for (String a : amigos) {
             sol.add(a);
         }
-        
+        //añadimos los conectados al hashmap de chats
         for (String a : amigosConectados) {
             if (!this.chats.containsKey(a)) {
                 this.chats.put(a, "");
@@ -185,8 +192,8 @@ public class VClienteController implements Initializable {
         }
         this.listaAmigos.setItems(sol);
     }
-    
-    //metodo que coloca los amigos conecados en la listView
+
+    //metodo que coloca los amigos en la listView
     public void actualizarAmigos(ArrayList<String> amigos) {
         ObservableList sol = FXCollections.observableArrayList();
         for (String a : amigos) {
@@ -209,6 +216,7 @@ public class VClienteController implements Initializable {
             controlador = loader.getController();
             controlador.inicializarAtributos(c);
             // Seteo la scene y la muestro
+            stage.getIcons().add(new Image("/imagenes/chatIcono.png"));
             stage.setScene(scene);
             stage.setTitle("Modificación Contraseña");
             stage.setResizable(false);
@@ -233,6 +241,7 @@ public class VClienteController implements Initializable {
             controlador = loader.getController();
             controlador.inicializarAtributos(c);
             // Seteo la scene y la muestro
+            stage.getIcons().add(new Image("/imagenes/chatIcono.png"));
             stage.setScene(scene);
             stage.setTitle("Solicitar Amistad");
             stage.setResizable(false);
@@ -248,9 +257,11 @@ public class VClienteController implements Initializable {
         this.chats.put(emisor, conversacion);
     }
 
+    //metodo que guarda el amigo en el hashmap de chats y si esta seleccionado
+    //modifica los parametros de la ventana
     public void conectarAmigo(String amigo) {
         this.chats.put(amigo, "");
-        if(this.listaAmigos.getSelectionModel().getSelectedItem().equals(amigo)){
+        if (this.listaAmigos.getSelectionModel().getSelectedItem().equals(amigo)) {
             this.lblDesconectado.setVisible(false);
             this.lblEnLinea.setVisible(true);
             this.txtMensaje.setEditable(true);
@@ -258,9 +269,11 @@ public class VClienteController implements Initializable {
         }
     }
 
+    //metodo que borra el amigo en el hashmap de chats y si esta seleccionado
+    //modifica los parametros de la ventana
     public void desconectarAmigo(String amigo) {
         this.chats.remove(amigo);
-        if(this.listaAmigos.getSelectionModel().getSelectedItem().equals(amigo)){
+        if (this.listaAmigos.getSelectionModel().getSelectedItem().equals(amigo)) {
             this.lblDesconectado.setVisible(true);
             this.lblEnLinea.setVisible(false);
             this.txtChat.setText("Tu amigo no se encuentra en linea");
