@@ -11,6 +11,8 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -104,14 +106,18 @@ public class VClienteController implements Initializable {
         //mostramos en la pantalla de mensajes
         this.txtChat.appendText(nuevoMensaje);
         //añadimos el mensaje al chat que ya tenemos
-        String conversacion =  this.txtChat.getText();
+        String conversacion = this.txtChat.getText();
         //lo guardamos en los chats
         this.chats.put(this.lblDestinatario.getText(), conversacion);
-        //enviamos el mensaje a nuestro amigo
-        this.c.enviarMensaje(conversacion, this.txtMensaje.getText());
+        try {
+            //enviamos el mensaje a nuestro amigo
+            this.c.enviarMensaje(this.lblDestinatario.getText(), this.txtMensaje.getText());
+        } catch (RemoteException ex) {
+            Logger.getLogger(VClienteController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //vaciamos el txtMensaje
         this.txtMensaje.setText("");
-        
+
     }
 
     @FXML
@@ -253,15 +259,19 @@ public class VClienteController implements Initializable {
     }
 
     public void recibirMensaje(String mensaje, String emisor) {
-        String conversacion = this.chats.get(emisor) + emisor + ": " + mensaje + "\n";
+        String nuevoMensaje = emisor + ": " + mensaje + "\n";
+        String conversacion = this.chats.get(emisor) + nuevoMensaje;
         this.chats.put(emisor, conversacion);
+        if ((this.listaAmigos.getSelectionModel().getSelectedItem()) != null && (this.listaAmigos.getSelectionModel().getSelectedItem().equals(emisor))) {
+            this.txtChat.appendText(nuevoMensaje);
+        }
     }
 
     //metodo que guarda el amigo en el hashmap de chats y si esta seleccionado
     //modifica los parametros de la ventana
     public void conectarAmigo(String amigo) {
         this.chats.put(amigo, "");
-        if (this.listaAmigos.getSelectionModel().getSelectedItem().equals(amigo)) {
+        if ((this.listaAmigos.getSelectionModel().getSelectedItem()) != null && (this.listaAmigos.getSelectionModel().getSelectedItem().equals(amigo))) {
             this.lblDesconectado.setVisible(false);
             this.lblEnLinea.setVisible(true);
             this.txtMensaje.setEditable(true);

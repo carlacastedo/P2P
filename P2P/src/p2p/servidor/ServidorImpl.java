@@ -139,4 +139,9 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         this.baseDatos.eliminarAmigo(solicitante, solicitado);
     }
 
+    @Override
+    public ClienteInterfaz solicitarInterfaz(String amigo) {
+        return this.clientes.get(amigo);
+    }
+
 }
