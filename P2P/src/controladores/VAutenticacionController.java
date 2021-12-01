@@ -7,6 +7,7 @@ package controladores;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
@@ -52,7 +53,6 @@ public class VAutenticacionController implements Initializable {
         BooleanBinding botonDeshabilitado = txtUsuario.textProperty().isEmpty().or(txtContraseña.textProperty().isEmpty());
         btnIniciarSesion.disableProperty().bind(botonDeshabilitado);
         btnRegistrarse.disableProperty().bind(botonDeshabilitado);
-
     }
 
     public void inicializarAtributos(Cliente c) {
@@ -72,6 +72,7 @@ public class VAutenticacionController implements Initializable {
                 a.showAndWait();
                 //abrimos la ventana de los clientes
                 VClienteController controlador = abrirVentanaCliente();
+                this.c.registrarCliente(this.txtUsuario.getText(), controlador);
                 //cerramos la ventana de autenticacion
                 Stage myStage = (Stage) this.txtUsuario.getScene().getWindow();
                 myStage.close();
@@ -106,7 +107,7 @@ public class VAutenticacionController implements Initializable {
         }
     }
 
-    private VClienteController abrirVentanaCliente() throws IOException {
+    private synchronized VClienteController abrirVentanaCliente() throws IOException {
         VClienteController controlador = null;
         try {
             FXMLLoader loader = new FXMLLoader();
