@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package p2p.servidor;
 
 import java.io.FileInputStream;
@@ -11,12 +7,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
 
-/**
- *
- * @author basesdatos
- */
 public class BBDD {
 
+    //Conexión con la base de datos
     private Connection conexion;
 
     public BBDD() {
@@ -48,33 +41,12 @@ public class BBDD {
         }
     }
 
-    public String consultarUsuarios() {
-        PreparedStatement stmUsuarios = null;
-        ResultSet rsUsuarios;
-        String texto = "";
-        String consulta = "select nombre from usuarios";
-        try {
-            stmUsuarios = conexion.prepareStatement(consulta);
-            rsUsuarios = stmUsuarios.executeQuery();
-            while (rsUsuarios.next()) {
-                texto += rsUsuarios.getString("nombre");
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        } finally {
-            try {
-                if (stmUsuarios != null) {
-                    stmUsuarios.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-        return texto;
-    }
-
+    //Método que devuelve los no amigos de usuario que cumplen el criterio de búsqueda
     public ArrayList<String> consultarNoAmigos(String usuario, String busqueda) {
         ArrayList<String> noAmigos = new ArrayList<>();
+        
+        //Se busca a todos los usuarios excepto a los que son amigos o tienen una solicitud
+        //de amistad pendiente con el usuario y exceptuando también al propio usuario
         String consulta = "select nombre from usuarios where LOWER(nombre) like LOWER(?) "
                 + "EXCEPT "
                 + "(select solicitante from solicitar_amistad "
@@ -103,8 +75,12 @@ public class BBDD {
         return noAmigos;
     }
 
+    //Método que devuelve una lista con los amigos de un determinado usuario
     public ArrayList<String> consultarAmigos(String usuario) {
         ArrayList<String> amigos = new ArrayList<>();
+        
+        //Se busca a todas las entradas de la tabla solicitar_amistad donde
+        //el usuario es parte de la clave primaria y es estado es aceptada
         String consulta = "select solicitante from solicitar_amistad "
                 + "where solicitado=? and estado='aceptado' "
                 + "UNION "
@@ -125,8 +101,13 @@ public class BBDD {
         return amigos;
     }
 
+    //Método que devuelve una lista de los amigos del usuario que cumplen un 
+    //determinado filtro
     public ArrayList<String> filtrarAmigos(String usuario, String filtro) {
         ArrayList<String> amigos = new ArrayList<>();
+        
+        //Buscamos los usuarios que tienen una solicitud aceptada con el usuario
+        //filtrando por sus nombres
         String consulta = "select solicitante from solicitar_amistad "
                 + "where solicitado=? and LOWER(solicitante) like LOWER(?) and estado='aceptado' "
                 + "UNION "
@@ -150,7 +131,9 @@ public class BBDD {
         return amigos;
     }
 
+    //Método que inserta un nuevo usuario en la base de datos
     public void insertarUsuario(String usuario, String contraseña) {
+        //Se inserta el usuario introduciendo para ello los campos requeridos
         String consulta = "insert into usuarios(nombre, contraseña) "
                 + "values(?, ?)";
         try (PreparedStatement stmUsuario = conexion.prepareStatement(consulta)) {
@@ -162,8 +145,13 @@ public class BBDD {
         }
     }
 
+    //Método que devuelve una lista de solicitudes de amistad que el usuario tiene
+    //pendientes de aceptar o rechazar
     public ArrayList<String> consultarSolicitudes(String solicitado) {
         ArrayList<String> solicitudes = new ArrayList<>();
+        
+        //Seleccionamos todos los usuarios con una solicitud donde el 
+        //solicitante es el usuario y el estado es pendiente
         String consulta = "select solicitante from solicitar_amistad "
                 + "where solicitado=? and estado='pendiente'";
 
@@ -180,7 +168,10 @@ public class BBDD {
         return solicitudes;
     }
 
+    //Método que registra una solicitud de amistad entre dos personas
     public void enviarSolicitud(String solicitante, String solicitado) {
+        //Intertamos el registro de la solicitud indicando para ello, quien ha solicitado
+        //amistad y a quien, y fijamos el estado a pendiente
         String consulta = "insert into solicitar_amistad(solicitante, solicitado, estado) "
                 + "values(?, ?, 'pendiente')";
 
@@ -193,7 +184,9 @@ public class BBDD {
         }
     }
 
+    //Método que acepta una solicitud que el usuario tiene pendiente
     public void aceptarSolicitud(String solicitante, String solicitado) {
+        //Se busca la solicitud indicada y se cambia pendiente por aceptada
         String modificacion = "update solicitar_amistad set estado='aceptado' where solicitante=? and"
                 + " solicitado=?";
 
@@ -206,6 +199,8 @@ public class BBDD {
         }
     }
 
+    //Método que elimina una solicitud de amistad al haber sido esta denegada por
+    //el usuario solicitado
     public void denegarSolicitud(String solicitante, String solicitado) {
         String borrado = "delete from solicitar_amistad where solicitante=? and"
                 + " solicitado=? and estado='pendiente'";
@@ -219,7 +214,9 @@ public class BBDD {
         }
     }
 
+    //Método que elimina la amistad entre dos usuarios
     public void eliminarAmigo(String solicitante, String solicitado) {
+        //Se elimina el registro de la solicitud de amistad entre los dos usuarios
         String insercion = "delete from solicitar_amistad where solicitante=? and"
                 + " solicitado=? and estado='aceptado'";
 
@@ -232,7 +229,9 @@ public class BBDD {
         }
     }
 
+    //Método que modifica la contraseña de un usuario
     public void modificarContraseña(String usuario, String contraseña) {
+        //Se cambia el valor de la contraseña del usuario 
         String modificacion = "update usuarios set contraseña=? where nombre=?";
 
         try (PreparedStatement stmSolAmis = conexion.prepareStatement(modificacion)) {
@@ -245,8 +244,12 @@ public class BBDD {
 
     }
 
+    //Método que comprueba si un usario está en la base de datos y si ha introducido correctamente
+    //su contraseña
     public Boolean autenticarUsuario(String usuario, String contraseña) throws java.rmi.RemoteException {
         Boolean autenticado = false;
+        //Buscamos un usuario con el nombre y la contraseña dados, si se encuentra
+        //entonces se ha autenticado al usuario
         String consulta = "select from usuarios where nombre=? and contraseña=?";
 
         try (PreparedStatement stmUsuario = conexion.prepareStatement(consulta)) {

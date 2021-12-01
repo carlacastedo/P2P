@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package p2p.servidor;
 
 import java.io.BufferedReader;
@@ -14,10 +9,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-/**
- *
- * @author ASUS
- */
 public class Servidor {
 
     public static void main(String args[]) {
@@ -35,6 +26,7 @@ public class Servidor {
             int RMIPortNum = Integer.parseInt(portNum);
             //Se crea un registro(en caso de que no exista previamente)
             startRegistry(RMIPortNum);
+            //Creamos una instancia del objeto remoto
             ServidorImpl exportedObj = new ServidorImpl();
             registryURL = "rmi://" + nombreHost + ":" + RMIPortNum + "/p2p";
             //Se enlaza el objeto con el registro
