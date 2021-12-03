@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -103,15 +104,17 @@ public class VClienteController implements Initializable {
     @FXML
     private void enviarMensaje(ActionEvent event) {
         String nuevoMensaje = "Tu: " + this.txtMensaje.getText() + "\n";
+        String destinatario = this.lblDestinatario.getText();
         //mostramos en la pantalla de mensajes
         this.txtChat.appendText(nuevoMensaje);
         //añadimos el mensaje al chat que ya tenemos
         String conversacion = this.txtChat.getText();
         //lo guardamos en los chats
-        this.chats.put(this.lblDestinatario.getText(), conversacion);
+        this.chats.put(destinatario, conversacion);
         try {
             //enviamos el mensaje a nuestro amigo
             this.c.enviarMensaje(this.lblDestinatario.getText(), this.txtMensaje.getText());
+            this.ordenarChats(destinatario);
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
         }
@@ -180,7 +183,9 @@ public class VClienteController implements Initializable {
         for (String s : solicitudes) {
             sol.add(s);
         }
-        this.listaSolicitudes.setItems(sol);
+        Platform.runLater(() -> {
+            listaSolicitudes.setItems(sol);
+        });
     }
 
     //metodo que coloca los amigos en la listView y los conectados en el HashMap de chats
@@ -196,7 +201,9 @@ public class VClienteController implements Initializable {
                 this.chats.put(a, "");
             }
         }
-        this.listaAmigos.setItems(sol);
+        Platform.runLater(() -> {
+            listaAmigos.setItems(sol);
+        });
     }
 
     //metodo que coloca los amigos en la listView
@@ -205,7 +212,9 @@ public class VClienteController implements Initializable {
         for (String a : amigos) {
             sol.add(a);
         }
-        this.listaAmigos.setItems(sol);
+        Platform.runLater(() -> {
+            listaAmigos.setItems(sol);
+        });
     }
 
     @FXML
@@ -258,21 +267,12 @@ public class VClienteController implements Initializable {
         }
     }
 
-    @FXML
     public void recibirMensaje(String mensaje, String emisor) {
         String nuevoMensaje = emisor + ": " + mensaje + "\n";
         String conversacion = this.chats.get(emisor) + nuevoMensaje;
         this.chats.put(emisor, conversacion);
         //ordenar los chats
-        ArrayList<String> ordenados = new ArrayList<>();
-        ordenados.add(emisor);
-        for(String amigo: this.listaAmigos.getItems()){
-            if(!amigo.equals(emisor)){
-                ordenados.add(amigo);
-            }
-        }
-        System.out.println(ordenados);
-        this.actualizarAmigos(ordenados);
+        this.ordenarChats(emisor);
         if ((this.listaAmigos.getSelectionModel().getSelectedItem()) != null && (this.listaAmigos.getSelectionModel().getSelectedItem().equals(emisor))) {
             this.txtChat.appendText(nuevoMensaje);
         }
@@ -300,5 +300,18 @@ public class VClienteController implements Initializable {
             this.txtChat.setText("Tu amigo no se encuentra en linea");
             this.txtMensaje.setEditable(false);
         }
+    }
+
+    //metodo que pone a un usuario de primero en la lista de amigos
+    private void ordenarChats(String destinatario) {
+        //ordenar los chats
+        ArrayList<String> ordenados = new ArrayList<>();
+        ordenados.add(destinatario);
+        for (String amigo : this.listaAmigos.getItems()) {
+            if (!amigo.equals(destinatario)) {
+                ordenados.add(amigo);
+            }
+        }
+        this.actualizarAmigos(ordenados);
     }
 }

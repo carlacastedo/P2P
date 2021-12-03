@@ -111,21 +111,28 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 
     @Override
     public void enviarSolicitud(String solicitante, String solicitado) throws RemoteException {
-        
-        if (this.clientes.get(solicitado) != null && !solicitado.equals(solicitante)) {
+        //comprobar que no te puedes enviar una solicitud a ti mismo
+        if (!solicitado.equals(solicitante)) {
             //metemos la solicitud en la base de datos
             this.baseDatos.enviarSolicitud(solicitante, solicitado);
             //mostramos las solicitudes en la interfaz del solicitado
-            this.clientes.get(solicitado).verSolicitudes(this.consultarSolicitudes(solicitado));
+            if (this.clientes.containsKey(solicitado)) {
+                this.clientes.get(solicitado).verSolicitudes(this.consultarSolicitudes(solicitado));
+            }
         }
     }
 
     @Override
     public void aceptarSolicitud(String solicitante, String solicitado) throws RemoteException {
+        //aceptamos la solicitud en la base de datos
         this.baseDatos.aceptarSolicitud(solicitante, solicitado);
-        if (this.clientes.get(solicitado) != null) {
-            //mostramos las solicitudes en la interfaz del solicitado
-            this.clientes.get(solicitado).verAmigos(this.consultarAmigos(solicitado), null);
+        //metemos el nuevo amigo en la ventana
+        this.clientes.get(solicitado).verAmigos(this.consultarAmigos(solicitado), null);
+        //si el solicitante esta conectado le añadimos su nuevo amigo
+        if (this.clientes.get(solicitante) != null) {
+            this.clientes.get(solicitante).verAmigos(this.consultarAmigos(solicitante), null);
+            this.clientes.get(solicitante).conectarAmigo(solicitado);
+            this.clientes.get(solicitado).conectarAmigo(solicitante);
         }
     }
 
