@@ -29,6 +29,9 @@ public interface ServidorInterfaz extends Remote {
 
     //metodo que devuelve las solicitudes pendientes de un usuario
     public ArrayList<String> consultarSolicitudes(String solicitado) throws java.rmi.RemoteException;
+    
+    //metodo que devuelve las solicitudes enviadas de un usuario
+    public ArrayList<String> consultarSolicitudesEnviadas(String solicitante) throws java.rmi.RemoteException;
 
     //metodo que envia una solicitud a un cliente por su nombre
     public void enviarSolicitud(String solicitante, String solicitado) throws java.rmi.RemoteException;
