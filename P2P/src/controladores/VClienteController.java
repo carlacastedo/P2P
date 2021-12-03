@@ -113,7 +113,7 @@ public class VClienteController implements Initializable {
             //enviamos el mensaje a nuestro amigo
             this.c.enviarMensaje(this.lblDestinatario.getText(), this.txtMensaje.getText());
         } catch (RemoteException ex) {
-            Logger.getLogger(VClienteController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
         }
         //vaciamos el txtMensaje
         this.txtMensaje.setText("");
@@ -258,10 +258,21 @@ public class VClienteController implements Initializable {
         }
     }
 
+    @FXML
     public void recibirMensaje(String mensaje, String emisor) {
         String nuevoMensaje = emisor + ": " + mensaje + "\n";
         String conversacion = this.chats.get(emisor) + nuevoMensaje;
         this.chats.put(emisor, conversacion);
+        //ordenar los chats
+        ArrayList<String> ordenados = new ArrayList<>();
+        ordenados.add(emisor);
+        for(String amigo: this.listaAmigos.getItems()){
+            if(!amigo.equals(emisor)){
+                ordenados.add(amigo);
+            }
+        }
+        System.out.println(ordenados);
+        this.actualizarAmigos(ordenados);
         if ((this.listaAmigos.getSelectionModel().getSelectedItem()) != null && (this.listaAmigos.getSelectionModel().getSelectedItem().equals(emisor))) {
             this.txtChat.appendText(nuevoMensaje);
         }
