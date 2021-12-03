@@ -151,4 +151,9 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         return this.clientes.get(amigo);
     }
 
+    @Override
+    public ArrayList<String> consultarSolicitudesEnviadas(String solicitante) throws RemoteException {
+        return this.baseDatos.consultarSolicitudes(solicitante);
+    }
+
 }

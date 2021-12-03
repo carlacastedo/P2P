@@ -167,6 +167,29 @@ public class BBDD {
         }
         return solicitudes;
     }
+    
+    //Método que devuelve una lista de solicitudes de amistad que el usuario tiene
+    //pendientes de aceptar o rechazar
+    public ArrayList<String> consultarSolicitudesEnviadas(String solicitante) {
+        ArrayList<String> solicitudes = new ArrayList<>();
+        
+        //Seleccionamos todos los usuarios con una solicitud donde el 
+        //solicitante es el usuario y el estado es pendiente
+        String consulta = "select solicitado from solicitar_amistad "
+                + "where solicitante=? and estado='pendiente'";
+
+        try (PreparedStatement stmUsuario = conexion.prepareStatement(consulta)) {
+            stmUsuario.setString(1, solicitante);
+            try (ResultSet rsUsuario = stmUsuario.executeQuery()) {
+                while (rsUsuario.next()) {
+                    solicitudes.add(rsUsuario.getString("solicitado"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println(consulta + "\n" + e.getMessage());
+        }
+        return solicitudes;
+    }
 
     //Método que registra una solicitud de amistad entre dos personas
     public void enviarSolicitud(String solicitante, String solicitado) {
