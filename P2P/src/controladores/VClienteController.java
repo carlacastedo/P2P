@@ -11,8 +11,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
@@ -24,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -34,6 +33,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import p2p.cliente.Cliente;
 
 /**
@@ -94,6 +94,22 @@ public class VClienteController implements Initializable {
         btnEnviar.disableProperty().bind(botonEnviar);
         this.txtMensaje.disableProperty().bind(escribir);
         this.chats = new HashMap<>();
+        listaAmigos.setCellFactory(cell -> {
+            return new ListCell<String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (!empty) {
+                        if (item != null && item.equals(listaAmigos.getSelectionModel().getSelectedItem())) {
+                            super.setStyle("-fx-font-weight: bold");
+                        } else {
+                            super.setStyle("-fx-font-weight: normal");
+                        }
+                    }
+                    super.setText(item);
+                }
+            };
+        });
     }
 
     public void inicializarAtributos(Cliente c, String usuario) {
