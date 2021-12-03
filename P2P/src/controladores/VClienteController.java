@@ -254,7 +254,7 @@ public class VClienteController implements Initializable {
             Scene scene = new Scene(ventana);
             Stage stage = new Stage();
             controlador = loader.getController();
-            controlador.inicializarAtributos(c);
+            controlador.inicializarAtributos(c, this.c.consultarSolicitudesEnviadas());
             // Seteo la scene y la muestro
             stage.getIcons().add(new Image("/imagenes/chatIcono.png"));
             stage.setScene(scene);

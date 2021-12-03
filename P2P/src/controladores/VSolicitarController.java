@@ -36,14 +36,11 @@ public class VSolicitarController implements Initializable {
     private ListView<String> listaUsuarios;
     @FXML
     private Button btnSolicitar;
-
-    private Cliente cliente;
     @FXML
     private ListView<String> listaEnviadas;
+    
+    private Cliente cliente;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         BooleanBinding listaSeleccionada = Bindings.size(this.listaUsuarios.getSelectionModel().getSelectedItems()).greaterThanOrEqualTo(1);
@@ -62,6 +59,7 @@ public class VSolicitarController implements Initializable {
             this.cliente.solicitarAmistad(solicitado);
             this.txtBuscar.setText("");
             this.listaUsuarios.getItems().clear();
+            this.listaEnviadas.getItems().add(solicitado);
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
         }
@@ -92,7 +90,7 @@ public class VSolicitarController implements Initializable {
             listaUsuarios.setItems(sol);
         });
     }
-    
+
     public void actualizarEnviadas(ArrayList<String> usuarios) {
         ObservableList sol = FXCollections.observableArrayList();
         for (String a : usuarios) {
