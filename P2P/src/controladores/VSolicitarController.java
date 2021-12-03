@@ -9,6 +9,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
@@ -37,6 +38,8 @@ public class VSolicitarController implements Initializable {
     private Button btnSolicitar;
 
     private Cliente cliente;
+    @FXML
+    private ListView<String> listaEnviadas;
 
     /**
      * Initializes the controller class.
@@ -47,14 +50,16 @@ public class VSolicitarController implements Initializable {
         this.btnSolicitar.disableProperty().bind(listaSeleccionada.not());
     }
 
-    public void inicializarAtributos(Cliente c) {
+    public void inicializarAtributos(Cliente c, ArrayList<String> enviadas) {
         this.cliente = c;
+        this.actualizarEnviadas(enviadas);
     }
 
     @FXML
     private void solicitar(ActionEvent event) {
         try {
-            this.cliente.solicitarAmistad(this.listaUsuarios.getSelectionModel().getSelectedItem());
+            String solicitado = this.listaUsuarios.getSelectionModel().getSelectedItem();
+            this.cliente.solicitarAmistad(solicitado);
             this.txtBuscar.setText("");
             this.listaUsuarios.getItems().clear();
         } catch (RemoteException ex) {
@@ -83,7 +88,18 @@ public class VSolicitarController implements Initializable {
         for (String a : usuarios) {
             sol.add(a);
         }
-        this.listaUsuarios.setItems(sol);
+        Platform.runLater(() -> {
+            listaUsuarios.setItems(sol);
+        });
     }
-
+    
+    public void actualizarEnviadas(ArrayList<String> usuarios) {
+        ObservableList sol = FXCollections.observableArrayList();
+        for (String a : usuarios) {
+            sol.add(a);
+        }
+        Platform.runLater(() -> {
+            listaEnviadas.setItems(sol);
+        });
+    }
 }
