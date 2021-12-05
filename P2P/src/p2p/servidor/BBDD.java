@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class BBDD {
-
     //Conexión con la base de datos
     private Connection conexion;
 

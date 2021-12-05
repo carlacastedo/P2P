@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controladores;
 
 import java.io.IOException;
@@ -33,14 +28,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import p2p.cliente.Cliente;
 
-/**
- * FXML Controller class
- *
- * @author ASUS
- */
 public class VClienteController implements Initializable {
 
     @FXML
@@ -80,27 +69,28 @@ public class VClienteController implements Initializable {
 
     private HashMap<String, String> chats;
 
-    /**
-     * Initializes the controller class.
-     *
-     * @param url
-     * @param rb
-     */
+    //atributo para guardar los nombres de los amigos con mensajes sin leer
+    private ArrayList<String> sinLeer;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.chats = new HashMap<>();
+        sinLeer = new ArrayList<>();
+
         // asocia el estado del botón con el estado de los text fields
         BooleanBinding botonEnviar = txtMensaje.textProperty().isEmpty();
         BooleanBinding escribir = lblDestinatario.textProperty().isEmpty();
         btnEnviar.disableProperty().bind(botonEnviar);
         this.txtMensaje.disableProperty().bind(escribir);
-        this.chats = new HashMap<>();
+
+        //definimos un estilo de item para poner en negrita los chats sin leer
         listaAmigos.setCellFactory(cell -> {
             return new ListCell<String>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                        if (item != null && item.equals(listaAmigos.getSelectionModel().getSelectedItem())) {
+                        if (item != null && sinLeer.contains(item)) {
                             super.setStyle("-fx-font-weight: bold");
                         } else {
                             super.setStyle("-fx-font-weight: normal");
@@ -117,7 +107,7 @@ public class VClienteController implements Initializable {
         this.lblNombre.setText(usuario);
     }
 
-    @FXML
+    @FXML //metodo que envia un mensaje a un amigo conectado seleccionado en la lista
     private void enviarMensaje(ActionEvent event) {
         String nuevoMensaje = "Tu: " + this.txtMensaje.getText() + "\n";
         String destinatario = this.lblDestinatario.getText();
@@ -130,13 +120,31 @@ public class VClienteController implements Initializable {
         try {
             //enviamos el mensaje a nuestro amigo
             this.c.enviarMensaje(this.lblDestinatario.getText(), this.txtMensaje.getText());
+            //ponemos el chat como primero
             this.ordenarChats(destinatario);
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
         }
         //vaciamos el txtMensaje
         this.txtMensaje.setText("");
+    }
 
+    //metodo que recibe un mensaje de un amigo
+    public void recibirMensaje(String mensaje, String emisor) {
+        //construimos el mensaje recibido
+        String recibido = emisor + ": " + mensaje + "\n";
+        //guardamos la conversacion
+        String conversacion = this.chats.get(emisor) + recibido;
+        this.chats.put(emisor, conversacion);
+        //ponemos en negrita
+        if (!this.sinLeer.contains(emisor) && !this.listaAmigos.getSelectionModel().getSelectedItem().equals(emisor)) {
+            this.sinLeer.add(emisor);
+        }
+        //ponemos el chat como primero
+        this.ordenarChats(emisor);
+        if (this.listaAmigos.getSelectionModel().getSelectedItem() != null && this.listaAmigos.getSelectionModel().getSelectedItem().equals(emisor)) {
+            this.txtChat.appendText(recibido);
+        }
     }
 
     @FXML
@@ -167,6 +175,7 @@ public class VClienteController implements Initializable {
     private void abrirChat(MouseEvent event) {
         String destinatario = this.listaAmigos.getSelectionModel().getSelectedItem();
         this.lblDestinatario.setText(destinatario);
+
         //comprobamos si el amigo esta conectado o no
         if (this.chats.containsKey(destinatario)) {
             //si esta conectado podremos escribir
@@ -174,6 +183,10 @@ public class VClienteController implements Initializable {
             this.lblDesconectado.setVisible(false);
             this.lblEnLinea.setVisible(true);
             this.txtChat.setText(this.chats.get(destinatario));
+            //comprobamos si el chat estaba sin leer para marcarlo como leido
+            if (this.sinLeer.contains(destinatario)) {
+                sinLeer.remove(destinatario);
+            }
         } else {
             //si no esta conectado no podemos escribir
             this.lblEnLinea.setVisible(false);
@@ -181,56 +194,6 @@ public class VClienteController implements Initializable {
             this.txtChat.setText("Tu amigo no se encuentra en linea");
             this.txtMensaje.setEditable(false);
         }
-    }
-
-    @FXML
-    private void filtrarAmigos(KeyEvent event) {
-        try {
-            ArrayList<String> lista = this.c.filtrarAmigos(this.txtBuscar.getText());
-            this.actualizarAmigos(lista);
-        } catch (RemoteException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-
-    //metodo que coloca las solicitudes en la listView
-    public void actualizarSolicitudes(ArrayList<String> solicitudes) {
-        ObservableList sol = FXCollections.observableArrayList();
-        for (String s : solicitudes) {
-            sol.add(s);
-        }
-        Platform.runLater(() -> {
-            listaSolicitudes.setItems(sol);
-        });
-    }
-
-    //metodo que coloca los amigos en la listView y los conectados en el HashMap de chats
-    public void inicializarAmigos(ArrayList<String> amigos, ArrayList<String> amigosConectados) {
-        ObservableList sol = FXCollections.observableArrayList();
-        //añadimos todos a la lista
-        for (String a : amigos) {
-            sol.add(a);
-        }
-        //añadimos los conectados al hashmap de chats
-        for (String a : amigosConectados) {
-            if (!this.chats.containsKey(a)) {
-                this.chats.put(a, "");
-            }
-        }
-        Platform.runLater(() -> {
-            listaAmigos.setItems(sol);
-        });
-    }
-
-    //metodo que coloca los amigos en la listView
-    public void actualizarAmigos(ArrayList<String> amigos) {
-        ObservableList sol = FXCollections.observableArrayList();
-        for (String a : amigos) {
-            sol.add(a);
-        }
-        Platform.runLater(() -> {
-            listaAmigos.setItems(sol);
-        });
     }
 
     @FXML
@@ -283,14 +246,13 @@ public class VClienteController implements Initializable {
         }
     }
 
-    public void recibirMensaje(String mensaje, String emisor) {
-        String nuevoMensaje = emisor + ": " + mensaje + "\n";
-        String conversacion = this.chats.get(emisor) + nuevoMensaje;
-        this.chats.put(emisor, conversacion);
-        //ordenar los chats
-        this.ordenarChats(emisor);
-        if ((this.listaAmigos.getSelectionModel().getSelectedItem()) != null && (this.listaAmigos.getSelectionModel().getSelectedItem().equals(emisor))) {
-            this.txtChat.appendText(nuevoMensaje);
+    @FXML
+    private void filtrarAmigos(KeyEvent event) {
+        try {
+            ArrayList<String> lista = this.c.filtrarAmigos(this.txtBuscar.getText());
+            this.actualizarAmigos(lista);
+        } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -329,5 +291,45 @@ public class VClienteController implements Initializable {
             }
         }
         this.actualizarAmigos(ordenados);
+    }
+
+    //metodo que coloca los amigos en la listView y los conectados en el HashMap de chats
+    public void inicializarAmigos(ArrayList<String> amigos, ArrayList<String> amigosConectados) {
+        ObservableList sol = FXCollections.observableArrayList();
+        //añadimos todos a la lista
+        for (String a : amigos) {
+            sol.add(a);
+        }
+        //añadimos los conectados al hashmap de chats
+        for (String a : amigosConectados) {
+            if (!this.chats.containsKey(a)) {
+                this.chats.put(a, "");
+            }
+        }
+        Platform.runLater(() -> {
+            listaAmigos.setItems(sol);
+        });
+    }
+
+    //metodo que coloca los amigos en la listView
+    public void actualizarAmigos(ArrayList<String> amigos) {
+        ObservableList sol = FXCollections.observableArrayList();
+        for (String a : amigos) {
+            sol.add(a);
+        }
+        Platform.runLater(() -> {
+            listaAmigos.setItems(sol);
+        });
+    }
+
+    //metodo que coloca las solicitudes en la listView
+    public void actualizarSolicitudes(ArrayList<String> solicitudes) {
+        ObservableList sol = FXCollections.observableArrayList();
+        for (String s : solicitudes) {
+            sol.add(s);
+        }
+        Platform.runLater(() -> {
+            listaSolicitudes.setItems(sol);
+        });
     }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controladores;
 
 import java.io.IOException;
@@ -23,11 +18,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import p2p.cliente.Cliente;
 
-/**
- * FXML Controller class
- *
- * @author anton
- */
 public class VAutenticacionController implements Initializable {
 
     @FXML
@@ -41,12 +31,6 @@ public class VAutenticacionController implements Initializable {
 
     private Cliente c;
 
-    /**
-     * Initializes the controller class.
-     *
-     * @param url
-     * @param rb
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // asocia el estado del botón con el estado de los text fields
@@ -59,7 +43,7 @@ public class VAutenticacionController implements Initializable {
         this.c = c;
     }
 
-    @FXML
+    @FXML //metodo que registra un usuario en la aplicacion si es su primera vez
     private void registrarUsuario(ActionEvent event) {
         //comprobamos si el usuario existe o no en el sistema
         try {
@@ -70,7 +54,7 @@ public class VAutenticacionController implements Initializable {
                 Alert a = new Alert(Alert.AlertType.INFORMATION);
                 a.setContentText("Usuario creado");
                 a.showAndWait();
-                //abrimos la ventana de los clientes
+                //abrimos la ventana del nuevo usuario
                 VClienteController controlador = abrirVentanaCliente();
                 this.c.registrarCliente(this.txtUsuario.getText(), controlador);
                 //cerramos la ventana de autenticacion
@@ -87,11 +71,11 @@ public class VAutenticacionController implements Initializable {
 
     }
 
-    @FXML
+    @FXML //metodo que autentica a un usuario ya existente en el sistema
     private void iniciarSesion(ActionEvent event) {
         try {
             if (this.c.existeUsuario(this.txtUsuario.getText(), this.txtContraseña.getText())) {
-                //abrimos la ventana del cliente
+                //abrimos la ventana de chats del usuario
                 VClienteController controlador = abrirVentanaCliente();
                 //cerramos la ventana de autenticacion
                 Stage myStage = (Stage) this.txtUsuario.getScene().getWindow();
@@ -107,6 +91,7 @@ public class VAutenticacionController implements Initializable {
         }
     }
 
+    //metodo que abre la ventana de chats de un usuario
     private synchronized VClienteController abrirVentanaCliente() throws IOException {
         VClienteController controlador = null;
         try {

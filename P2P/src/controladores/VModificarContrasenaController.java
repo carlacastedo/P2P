@@ -1,10 +1,5 @@
 package controladores;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
@@ -20,11 +15,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import p2p.cliente.Cliente;
 
-/**
- * FXML Controller class
- *
- * @author ASUS
- */
 public class VModificarContrasenaController implements Initializable {
 
     @FXML
@@ -35,14 +25,11 @@ public class VModificarContrasenaController implements Initializable {
     private PasswordField txtRepiteContrasena;
     @FXML
     private Button btnModificar;
-
-    private Cliente cliente;
     @FXML
     private Label lblError;
+    
+    private Cliente cliente;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         BooleanBinding modificar = this.txtContrasenaActual.textProperty().isEmpty().or(
@@ -61,14 +48,15 @@ public class VModificarContrasenaController implements Initializable {
         String contrasenaAntigua = this.txtContrasenaActual.getText();
         String repetida = this.txtRepiteContrasena.getText();
         Boolean cambiada = false;
+        //comprobamos que las nuevas contraseñas coincidan
         if (repetida.equals(contrasenaNueva)) {
             this.lblError.setVisible(false);
             try {
+                //modificamos la contraseña
                 cambiada = this.cliente.modificarContraseña(contrasenaAntigua, contrasenaNueva);
-                if(cambiada){
+                if (cambiada) {
                     ((Stage) this.txtContrasenaActual.getScene().getWindow()).close();
-                }
-                if(!cambiada){
+                }else{
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setHeaderText(null);
                     alert.setTitle("Error");

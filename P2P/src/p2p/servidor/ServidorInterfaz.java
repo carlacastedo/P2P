@@ -7,10 +7,10 @@ import p2p.cliente.ClienteInterfaz;
 public interface ServidorInterfaz extends Remote {
 
     //metodo que abre sesion de un cliente en la aplicacion
-    public void iniciarSesion(ClienteInterfaz cliente) throws java.rmi.RemoteException;
+    public void iniciarSesion(ClienteInterfaz cliente, String nombre) throws java.rmi.RemoteException;
 
     //metodo que cierra sesion de un cliente en la aplicacion
-    public void cerrarSesion(ClienteInterfaz cliente) throws java.rmi.RemoteException;
+    public void cerrarSesion(ClienteInterfaz cliente, String nombre) throws java.rmi.RemoteException;
 
     //metodo que comprueba si un usuario existe en la base de datos dado su nombre y contraseña
     public Boolean autenticarUsuario(String usuario, String contraseña) throws java.rmi.RemoteException;
@@ -21,7 +21,7 @@ public interface ServidorInterfaz extends Remote {
     //metodo que devuelve los amigos de un usuario 
     public ArrayList<String> consultarAmigos(String usuario) throws java.rmi.RemoteException;
 
-    //metodo que devuelve los usuarios no amigos de un usuario
+    //metodo que devuelve los usuarios que no son amigos de un usuario
     public ArrayList<String> consultarNoAmigos(String nombreCliente, String busqueda) throws java.rmi.RemoteException;
 
     //metodo que filtra los usuarios por su nombre
@@ -45,9 +45,6 @@ public interface ServidorInterfaz extends Remote {
     //metodo para modificar la contraseña del usuario que inicia sesion en la aplicacion
     public Boolean modificarContraseña(String usuario, String contrasenaAntigua, String contrasenaNueva) throws java.rmi.RemoteException;
 
-    public void eliminarAmigo(String solicitante, String solicitado) throws java.rmi.RemoteException;
-
-    //metodo que devuelve la interfaz remota de un amigo conectado
+    //metodo que devuelve la interfaz remota de un amigo conectado para el intercambio de mensajes
     public ClienteInterfaz solicitarInterfaz(String amigo) throws java.rmi.RemoteException;
-
 }

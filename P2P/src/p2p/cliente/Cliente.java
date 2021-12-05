@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package p2p.cliente;
 
 import controladores.VAutenticacionController;
@@ -22,17 +17,13 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-/**
- *
- * @author anton
- */
 public class Cliente extends Application {
 
     private static ClienteInterfaz cliente;
     private static ServidorInterfaz servidor;
+    private String nombreCliente;
 
     public static void main(String[] args) {
-
         try {
             String host = "localhost";
             String puerto = "1500";
@@ -67,33 +58,35 @@ public class Cliente extends Application {
             System.out.println(e.getMessage());
         }
     }
-    
+
     //metodo que se ejecuta al cerrar el cliente
-    @Override 
-    public void stop(){
+    @Override
+    public void stop() {
         try {
-            servidor.cerrarSesion(cliente);
+            servidor.cerrarSesion(cliente, this.nombreCliente);
             exit(0);
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    public Boolean existeUsuario(String usuario, String contraseña) throws RemoteException {
-        return servidor.autenticarUsuario(usuario, contraseña);
+    public Boolean existeUsuario(String nombre, String contraseña) throws RemoteException {
+        return servidor.autenticarUsuario(nombre, contraseña);
     }
 
-    public void insertarUsuario(String usuario, String contraseña) throws RemoteException {
-        servidor.insertarUsuario(usuario, contraseña);
+    public void insertarUsuario(String nombre, String contraseña) throws RemoteException {
+        this.nombreCliente = nombre;
+        servidor.insertarUsuario(nombreCliente, contraseña);
     }
 
     public void registrarCliente(String nombre, VClienteController controlador) throws RemoteException {
-        cliente = new ClienteImpl(nombre, controlador);
-        servidor.iniciarSesion(cliente);
+        this.nombreCliente = nombre;
+        cliente = new ClienteImpl(controlador);
+        servidor.iniciarSesion(cliente, nombreCliente);
     }
 
     public void aceptarSolicitud(String amigo) throws RemoteException {
-        servidor.aceptarSolicitud(amigo, cliente.getNombreCliente());
+        servidor.aceptarSolicitud(amigo, this.nombreCliente);
     }
 
     public void denegarSolicitud(String amigo, String solicitado) throws RemoteException {
@@ -101,24 +94,26 @@ public class Cliente extends Application {
     }
 
     public void enviarMensaje(String amigo, String mensaje) throws RemoteException {
-        ClienteInterfaz a=servidor.solicitarInterfaz(amigo);
-        a.recibirMensaje(mensaje,cliente.getNombreCliente());
+        //solicitamos la interfaz remota del amigo al servidor
+        ClienteInterfaz a = servidor.solicitarInterfaz(amigo);
+        //recibimos el mensaje en la interfaz del amigo
+        a.recibirMensaje(mensaje, this.nombreCliente);
     }
 
     public ArrayList<String> filtrarAmigos(String filtro) throws RemoteException {
-        return servidor.filtrarAmigos(filtro, cliente.getNombreCliente());
+        return servidor.filtrarAmigos(filtro, this.nombreCliente);
     }
 
     public Boolean modificarContraseña(String contrasenaAntigua, String contrasenaNueva) throws RemoteException {
-        return servidor.modificarContraseña(cliente.getNombreCliente(), contrasenaAntigua, contrasenaNueva);
+        return servidor.modificarContraseña(this.nombreCliente, contrasenaAntigua, contrasenaNueva);
     }
 
     public ArrayList<String> consultarNoAmigos(String busqueda) throws RemoteException {
-        return servidor.consultarNoAmigos(cliente.getNombreCliente(), busqueda);
+        return servidor.consultarNoAmigos(this.nombreCliente, busqueda);
     }
 
     public void solicitarAmistad(String solicitado) throws RemoteException {
-        servidor.enviarSolicitud(cliente.getNombreCliente(), solicitado);
+        servidor.enviarSolicitud(this.nombreCliente, solicitado);
     }
 
     public ArrayList<String> consultarAmigos(String usuario) throws RemoteException {
@@ -126,6 +121,10 @@ public class Cliente extends Application {
     }
 
     public ArrayList<String> consultarSolicitudesEnviadas() throws RemoteException {
-        return servidor.consultarSolicitudesEnviadas(cliente.getNombreCliente());
+        return servidor.consultarSolicitudesEnviadas(this.nombreCliente);
+    }
+
+    public String getNombreCliente() {
+        return nombreCliente;
     }
 }

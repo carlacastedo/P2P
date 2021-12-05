@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controladores;
 
 import java.net.URL;
@@ -23,11 +18,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import p2p.cliente.Cliente;
 
-/**
- * FXML Controller class
- *
- * @author ASUS
- */
 public class VSolicitarController implements Initializable {
 
     @FXML
@@ -43,13 +33,15 @@ public class VSolicitarController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //que el botono no se pueda pulsar si no hay nada en la lista
         BooleanBinding listaSeleccionada = Bindings.size(this.listaUsuarios.getSelectionModel().getSelectedItems()).greaterThanOrEqualTo(1);
         this.btnSolicitar.disableProperty().bind(listaSeleccionada.not());
     }
 
+    //metodo que inicializa los atributos de la ventana
     public void inicializarAtributos(Cliente c, ArrayList<String> enviadas) {
         this.cliente = c;
-        this.actualizarEnviadas(enviadas);
+        this.verEnviadas(enviadas);
     }
 
     @FXML
@@ -91,7 +83,7 @@ public class VSolicitarController implements Initializable {
         });
     }
 
-    public void actualizarEnviadas(ArrayList<String> usuarios) {
+    public void verEnviadas(ArrayList<String> usuarios) {
         ObservableList sol = FXCollections.observableArrayList();
         for (String a : usuarios) {
             sol.add(a);

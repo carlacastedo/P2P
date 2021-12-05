@@ -27,10 +27,10 @@ public class Servidor {
             //Se crea un registro(en caso de que no exista previamente)
             startRegistry(RMIPortNum);
             //Creamos una instancia del objeto remoto
-            ServidorImpl exportedObj = new ServidorImpl();
+            ServidorImpl objExportado = new ServidorImpl();
             registryURL = "rmi://" + nombreHost + ":" + RMIPortNum + "/p2p";
             //Se enlaza el objeto con el registro
-            Naming.rebind(registryURL, exportedObj);
+            Naming.rebind(registryURL, objExportado);
             listRegistry(registryURL);
             //Imprimimos que el servidor está listo para su funcionamiento
             System.out.println("Servidor P2P listo");

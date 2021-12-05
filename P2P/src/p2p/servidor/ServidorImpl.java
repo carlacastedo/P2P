@@ -23,45 +23,49 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     }
 
     @Override
-    public synchronized void iniciarSesion(ClienteInterfaz cliente) throws java.rmi.RemoteException {
-        //comprobamos si no esta registrado en la aplicacion
+    public synchronized void iniciarSesion(ClienteInterfaz cliente, String nombre) throws java.rmi.RemoteException {
+        //comprobamos si no ha iniciado sesion en la aplicacion
         if (!(clientes.containsValue(cliente))) {
-            clientes.put(cliente.getNombreCliente(), cliente);
-            System.out.println(cliente.getNombreCliente() + " ha iniciado sesion");
+            //lo añadimos al hashmap de interfaces de clientes conectados
+            clientes.put(nombre, cliente);
+            //mensaje de informacion
+            System.out.println(nombre + " ha iniciado sesion");
 
             //consultamos todos sus amigos, esten conectados o no
-            ArrayList<String> amigos = this.baseDatos.consultarAmigos(cliente.getNombreCliente());
+            ArrayList<String> amigos = this.baseDatos.consultarAmigos(nombre);
             ArrayList<String> amigosConectados = new ArrayList<>();
 
-            //comprobamos los amigos que estan conectados, que serán los registrados en la aplicacion
+            //comprobamos los amigos que estan conectados, que serán los registrados en la aplicacion y a los que
+            //habrá que notificar
             for (String a : amigos) {
                 if (clientes.keySet().contains(a)) {
                     amigosConectados.add(a);
-                    //notificamos a los amigos del cliente que se acaba de conectar de su conexion
-                    this.clientes.get(a).conectarAmigo(cliente.getNombreCliente());
+                    //notificamos de la conexion a los amigos del cliente que se acaba de conectar
+                    this.clientes.get(a).conectarAmigo(nombre);
                 }
             }
             //metemos en la interfaz grafica todos los amigos y guardamos los conectados
             cliente.verAmigos(amigos, amigosConectados);
 
             //buscamos las solicitudes pendientes y las mostramos
-            cliente.verSolicitudes(this.baseDatos.consultarSolicitudes(cliente.getNombreCliente()));
+            cliente.verSolicitudes(this.baseDatos.consultarSolicitudes(nombre));
         }
     }
 
     @Override
-    public synchronized void cerrarSesion(ClienteInterfaz cliente) throws java.rmi.RemoteException {
+    public synchronized void cerrarSesion(ClienteInterfaz cliente, String nombre) throws java.rmi.RemoteException {
         //si ha iniciado sesion lo quitamos
-        if (clientes.remove(cliente.getNombreCliente()) != null) {
-            System.out.println(cliente.getNombreCliente() + " ha cerrado sesion");
+        if (clientes.containsKey(nombre)) {
+            clientes.remove(nombre);
+            System.out.println(nombre + " ha cerrado sesion");
             //notificamos a sus amigos de la desconexion
-            ArrayList<String> amigos = this.baseDatos.consultarAmigos(cliente.getNombreCliente());
+            ArrayList<String> amigos = this.baseDatos.consultarAmigos(nombre);
 
             //comprobamos los amigos que estan conectados
             for (String a : amigos) {
                 if (clientes.keySet().contains(a)) {
                     //notificamos de la desconexion a sus amigos
-                    this.clientes.get(a).desconectarAmigo(cliente.getNombreCliente());
+                    this.clientes.get(a).desconectarAmigo(nombre);
                 }
             }
         } else {
@@ -71,17 +75,21 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 
     @Override
     public void insertarUsuario(String usuario, String contraseña) throws RemoteException {
+        //insertamos un usuario en la base de datos
         this.baseDatos.insertarUsuario(usuario, contraseña);
     }
 
     @Override
     public Boolean autenticarUsuario(String usuario, String contraseña) throws RemoteException {
+        //comprobamos si los datos son correctos
         return this.baseDatos.autenticarUsuario(usuario, contraseña);
     }
 
     @Override
     public Boolean modificarContraseña(String usuario, String contrasenaAntigua, String contrasenaNueva) throws RemoteException {
+        //comprobamos si es el usuario el que va a cambiar su contraseña
         if (this.autenticarUsuario(usuario, contrasenaAntigua)) {
+            //modidicamos la contraseña en la base de datos
             this.baseDatos.modificarContraseña(usuario, contrasenaNueva);
             return true;
         } else {
@@ -115,7 +123,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         if (!solicitado.equals(solicitante)) {
             //metemos la solicitud en la base de datos
             this.baseDatos.enviarSolicitud(solicitante, solicitado);
-            //mostramos las solicitudes en la interfaz del solicitado
+            //mostramos las solicitudes en la interfaz del solicitado en caso de que este conectado
             if (this.clientes.containsKey(solicitado)) {
                 this.clientes.get(solicitado).verSolicitudes(this.consultarSolicitudes(solicitado));
             }
@@ -128,7 +136,8 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         this.baseDatos.aceptarSolicitud(solicitante, solicitado);
         //metemos el nuevo amigo en la ventana
         this.clientes.get(solicitado).verAmigos(this.consultarAmigos(solicitado), null);
-        //si el solicitante esta conectado le añadimos su nuevo amigo
+        //si el solicitante esta conectado le añadimos su nuevo amigo y notificamos de la conexion
+        // al amigo
         if (this.clientes.get(solicitante) != null) {
             this.clientes.get(solicitante).verAmigos(this.consultarAmigos(solicitante), null);
             this.clientes.get(solicitante).conectarAmigo(solicitado);
@@ -138,22 +147,22 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 
     @Override
     public void denegarSolicitud(String solicitante, String solicitado) throws RemoteException {
+        //eliminamos la solicitud de la base de datos
         this.baseDatos.denegarSolicitud(solicitante, solicitado);
-    }
-
-    @Override
-    public void eliminarAmigo(String solicitante, String solicitado) throws RemoteException {
-        this.baseDatos.eliminarAmigo(solicitante, solicitado);
-    }
-
-    @Override
-    public ClienteInterfaz solicitarInterfaz(String amigo) {
-        return this.clientes.get(amigo);
     }
 
     @Override
     public ArrayList<String> consultarSolicitudesEnviadas(String solicitante) throws RemoteException {
         return this.baseDatos.consultarSolicitudesEnviadas(solicitante);
+    }
+
+    @Override
+    public ClienteInterfaz solicitarInterfaz(String amigo) {
+        if (this.clientes.containsKey(amigo)) {
+            return this.clientes.get(amigo);
+        } else {
+            return null;
+        }
     }
 
 }
