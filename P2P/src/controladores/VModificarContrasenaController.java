@@ -55,6 +55,14 @@ public class VModificarContrasenaController implements Initializable {
                 //modificamos la contraseña
                 cambiada = this.cliente.modificarContraseña(contrasenaAntigua, contrasenaNueva);
                 if (cambiada) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText(null);
+                    alert.setTitle("Información");
+                    alert.setContentText("Se ha modificado la contraseña");
+                    alert.showAndWait();
+                    this.txtContrasenaActual.setText("");
+                    this.txtContrasenaNueva.setText("");
+                    this.txtRepiteContrasena.setText("");
                     ((Stage) this.txtContrasenaActual.getScene().getWindow()).close();
                 }else{
                     Alert alert = new Alert(Alert.AlertType.ERROR);
