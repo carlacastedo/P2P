@@ -26,7 +26,7 @@ public class Cliente extends Application {
     public static void main(String[] args) {
         try {
             String host = "localhost";
-            String puerto = "1500";
+            String puerto = "1099";
             String registryURL = "rmi://" + host + ":" + puerto + "/p2p";
             servidor = (ServidorInterfaz) Naming.lookup(registryURL);
             //iniciamos la aplicacion con ventanas
