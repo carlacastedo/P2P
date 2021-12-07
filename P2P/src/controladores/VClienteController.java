@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -154,6 +155,11 @@ public class VClienteController implements Initializable {
             c.aceptarSolicitud(solicitante);
             //eliminamos la solicitud de la lista
             this.listaSolicitudes.getItems().remove(solicitante);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Información");
+            alert.setContentText("Se ha aceptado la solicitud");
+            alert.showAndWait();
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
         }
@@ -166,6 +172,11 @@ public class VClienteController implements Initializable {
             c.denegarSolicitud(solicitante, this.lblNombre.getText());
             //eliminamos la solicitud de la lista
             this.listaSolicitudes.getItems().remove(solicitante);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Información");
+            alert.setContentText("Se ha denegado la solicitud");
+            alert.showAndWait();
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
         }

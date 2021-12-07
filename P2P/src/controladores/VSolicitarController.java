@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -51,6 +52,11 @@ public class VSolicitarController implements Initializable {
             this.cliente.solicitarAmistad(solicitado);
             this.txtBuscar.setText("");
             this.listaUsuarios.getItems().clear();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Información");
+            alert.setContentText("Se ha enviado una solicitud de amistad");
+            alert.showAndWait();
             this.listaEnviadas.getItems().add(solicitado);
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
