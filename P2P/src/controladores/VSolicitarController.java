@@ -34,7 +34,7 @@ public class VSolicitarController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //que el botono no se pueda pulsar si no hay nada en la lista
+        //que el boton no se pueda pulsar si no hay nada en la lista
         BooleanBinding listaSeleccionada = Bindings.size(this.listaUsuarios.getSelectionModel().getSelectedItems()).greaterThanOrEqualTo(1);
         this.btnSolicitar.disableProperty().bind(listaSeleccionada.not());
     }
@@ -45,7 +45,7 @@ public class VSolicitarController implements Initializable {
         this.verEnviadas(enviadas);
     }
 
-    @FXML
+    @FXML//metodo que solicita amistad a un usuario no amigo del usuario actual
     private void solicitar(ActionEvent event) {
         try {
             String solicitado = this.listaUsuarios.getSelectionModel().getSelectedItem();
@@ -63,12 +63,14 @@ public class VSolicitarController implements Initializable {
         }
     }
 
-    @FXML
+    @FXML//metodo que busca usuarios que siguen un patron, para solicitar amistad
     private void filtrarUsuarios(KeyEvent event) {
         ArrayList<String> usuarios;
         try {
             String busqueda = this.txtBuscar.getText();
+            //debemos conocer como minimo 2 caracteres de su nombre de usuario
             if (busqueda.length() >= 2) {
+                //devolvemos los usuarios no amigos que cumplen el criterio
                 usuarios = this.cliente.consultarNoAmigos(busqueda);
                 this.actualizarUsuarios(usuarios);
             } else if (busqueda.length() == 0) {
@@ -79,6 +81,7 @@ public class VSolicitarController implements Initializable {
         }
     }
 
+    //metodo para actualizar la vista de los usuarios no amigos
     public void actualizarUsuarios(ArrayList<String> usuarios) {
         ObservableList sol = FXCollections.observableArrayList();
         for (String a : usuarios) {
@@ -89,6 +92,7 @@ public class VSolicitarController implements Initializable {
         });
     }
 
+    //metodo que actualiza la lista de solicitudes enviadas
     public void verEnviadas(ArrayList<String> usuarios) {
         ObservableList sol = FXCollections.observableArrayList();
         for (String a : usuarios) {
