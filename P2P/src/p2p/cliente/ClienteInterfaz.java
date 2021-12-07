@@ -14,8 +14,6 @@ import java.util.ArrayList;
  */
 public interface ClienteInterfaz extends Remote {
 
-    //public String getNombreCliente() throws java.rmi.RemoteException;
-
     //metodo que añade a un amigo como conectado 
     public void conectarAmigo(String amigo) throws java.rmi.RemoteException;
 

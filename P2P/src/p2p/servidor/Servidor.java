@@ -12,17 +12,10 @@ import java.rmi.registry.Registry;
 public class Servidor {
 
     public static void main(String args[]) {
-        InputStreamReader is = new InputStreamReader(System.in);
-        BufferedReader br = new BufferedReader(is);
         String portNum, registryURL, nombreHost;
         try {
-            //Se pide el número de puerto
-            /*System.out.println("Introduce el nombre de host:");
-            nombreHost = br.readLine();
-            System.out.println("Introduce el numero de puerto:");
-            portNum = br.readLine();*/
             nombreHost = "localhost";
-            portNum = "1500";
+            portNum = "1099";
             int RMIPortNum = Integer.parseInt(portNum);
             //Se crea un registro(en caso de que no exista previamente)
             startRegistry(RMIPortNum);

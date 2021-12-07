@@ -130,7 +130,7 @@ public class VClienteController implements Initializable {
     }
 
     //metodo que recibe un mensaje de un amigo
-    public void recibirMensaje(String mensaje, String emisor) {
+    public synchronized void recibirMensaje(String mensaje, String emisor) {
         //construimos el mensaje recibido
         String recibido = emisor + ": " + mensaje + "\n";
         //guardamos la conversacion
@@ -172,7 +172,7 @@ public class VClienteController implements Initializable {
     }
 
     @FXML//metodo que coloca los mensajes con un amigo en la ventana del chat
-    private void abrirChat(MouseEvent event) {
+    private synchronized void abrirChat(MouseEvent event) {
         String destinatario = this.listaAmigos.getSelectionModel().getSelectedItem();
         this.lblDestinatario.setText(destinatario);
 
@@ -258,7 +258,7 @@ public class VClienteController implements Initializable {
 
     //metodo que guarda el amigo en el hashmap de chats y si esta seleccionado
     //modifica los parametros de la ventana
-    public void conectarAmigo(String amigo) {
+    public synchronized void conectarAmigo(String amigo) {
         this.chats.put(amigo, "");
         if ((this.listaAmigos.getSelectionModel().getSelectedItem()) != null && (this.listaAmigos.getSelectionModel().getSelectedItem().equals(amigo))) {
             this.lblDesconectado.setVisible(false);
@@ -270,7 +270,7 @@ public class VClienteController implements Initializable {
 
     //metodo que borra el amigo en el hashmap de chats y si esta seleccionado
     //modifica los parametros de la ventana
-    public void desconectarAmigo(String amigo) {
+    public synchronized void desconectarAmigo(String amigo) {
         this.chats.remove(amigo);
         if (this.listaAmigos.getSelectionModel().getSelectedItem().equals(amigo)) {
             this.lblDesconectado.setVisible(true);

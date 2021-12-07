@@ -1,4 +1,3 @@
-
 package p2p.cliente;
 
 import controladores.VClienteController;

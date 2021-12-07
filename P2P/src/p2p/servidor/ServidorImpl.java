@@ -86,7 +86,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     }
 
     @Override
-    public Boolean modificarContraseña(String usuario, String contrasenaAntigua, String contrasenaNueva) throws RemoteException {
+    public synchronized Boolean modificarContraseña(String usuario, String contrasenaAntigua, String contrasenaNueva) throws RemoteException {
         //comprobamos si es el usuario el que va a cambiar su contraseña
         if (this.autenticarUsuario(usuario, contrasenaAntigua)) {
             //modidicamos la contraseña en la base de datos
@@ -118,7 +118,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     }
 
     @Override
-    public void enviarSolicitud(String solicitante, String solicitado) throws RemoteException {
+    public synchronized void enviarSolicitud(String solicitante, String solicitado) throws RemoteException {
         //comprobar que no te puedes enviar una solicitud a ti mismo
         if (!solicitado.equals(solicitante)) {
             //metemos la solicitud en la base de datos
@@ -131,7 +131,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     }
 
     @Override
-    public void aceptarSolicitud(String solicitante, String solicitado) throws RemoteException {
+    public synchronized void aceptarSolicitud(String solicitante, String solicitado) throws RemoteException {
         //aceptamos la solicitud en la base de datos
         this.baseDatos.aceptarSolicitud(solicitante, solicitado);
         //metemos el nuevo amigo en la ventana
