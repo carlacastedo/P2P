@@ -138,7 +138,7 @@ public class VClienteController implements Initializable {
         String conversacion = this.chats.get(emisor) + recibido;
         this.chats.put(emisor, conversacion);
         //ponemos en negrita
-        if (!this.sinLeer.contains(emisor) && !this.listaAmigos.getSelectionModel().getSelectedItem().equals(emisor)) {
+        if (!this.sinLeer.contains(emisor) && this.listaAmigos.getSelectionModel().getSelectedItem() != null && !this.listaAmigos.getSelectionModel().getSelectedItem().equals(emisor)) {
             this.sinLeer.add(emisor);
         }
         //ponemos el chat como primero
@@ -188,7 +188,7 @@ public class VClienteController implements Initializable {
         this.lblDestinatario.setText(destinatario);
 
         //comprobamos si el amigo esta conectado o no
-        if (this.chats.containsKey(destinatario)) {
+        if (destinatario != null && this.chats.containsKey(destinatario)) {
             //si esta conectado podremos escribir
             this.txtMensaje.setEditable(true);
             this.lblDesconectado.setVisible(false);
