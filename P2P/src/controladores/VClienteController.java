@@ -229,7 +229,7 @@ public class VClienteController implements Initializable {
 
     @FXML
     private void solicitarAmistad(MouseEvent event) {
-        VSolicitarController controlador = null;
+        VSolicitarController controlador;
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/ventanas/VSolicitar.fxml"));
