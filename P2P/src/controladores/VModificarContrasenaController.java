@@ -27,7 +27,7 @@ public class VModificarContrasenaController implements Initializable {
     private Button btnModificar;
     @FXML
     private Label lblError;
-    
+
     private Cliente cliente;
 
     @Override
@@ -42,7 +42,7 @@ public class VModificarContrasenaController implements Initializable {
         this.cliente = c;
     }
 
-    @FXML
+    @FXML//metodo para modificar la contraseña de un usuario si la contraseña antigua es correcta
     private void modificar(ActionEvent event) {
         String contrasenaNueva = this.txtContrasenaNueva.getText();
         String contrasenaAntigua = this.txtContrasenaActual.getText();
@@ -52,8 +52,9 @@ public class VModificarContrasenaController implements Initializable {
         if (repetida.equals(contrasenaNueva)) {
             this.lblError.setVisible(false);
             try {
-                //modificamos la contraseña
+                //intentamos modificar la contraseña
                 cambiada = this.cliente.modificarContraseña(contrasenaAntigua, contrasenaNueva);
+                //si se ha cambiado correctamente informamos por pantalla del exito
                 if (cambiada) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setHeaderText(null);
@@ -64,7 +65,7 @@ public class VModificarContrasenaController implements Initializable {
                     this.txtContrasenaNueva.setText("");
                     this.txtRepiteContrasena.setText("");
                     ((Stage) this.txtContrasenaActual.getScene().getWindow()).close();
-                }else{
+                } else {//si se ha cambiado correctamente informamos por pantalla del error
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setHeaderText(null);
                     alert.setTitle("Error");
