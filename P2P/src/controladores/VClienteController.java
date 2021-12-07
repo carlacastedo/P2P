@@ -155,11 +155,6 @@ public class VClienteController implements Initializable {
             c.aceptarSolicitud(solicitante);
             //eliminamos la solicitud de la lista
             this.listaSolicitudes.getItems().remove(solicitante);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText(null);
-            alert.setTitle("Información");
-            alert.setContentText("Se ha aceptado la solicitud");
-            alert.showAndWait();
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
         }
@@ -292,13 +287,13 @@ public class VClienteController implements Initializable {
     //modifica los parametros de la ventana
     public synchronized void desconectarAmigo(String amigo) {
         this.chats.remove(amigo);
-        if (this.listaAmigos.getSelectionModel().getSelectedItem().equals(amigo)) {
+        if (this.listaAmigos.getSelectionModel().getSelectedItem() != null && this.listaAmigos.getSelectionModel().getSelectedItem().equals(amigo)) {
             this.lblDesconectado.setVisible(true);
             this.lblEnLinea.setVisible(false);
             this.txtChat.setText("Tu amigo no se encuentra en linea");
             this.txtMensaje.setEditable(false);
         }
-/*
+
         Platform.runLater(
                 () -> {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -306,7 +301,7 @@ public class VClienteController implements Initializable {
                     alert.setTitle("Información");
                     alert.setContentText(amigo + " se ha desconectado");
                     alert.showAndWait();
-                });*/
+                });
 
     }
 
