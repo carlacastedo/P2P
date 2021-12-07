@@ -277,6 +277,15 @@ public class VClienteController implements Initializable {
             this.txtMensaje.setEditable(true);
             this.txtChat.setText(this.chats.get(amigo));
         }
+        Platform.runLater(
+                () -> {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText(null);
+                    alert.setTitle("Información");
+                    alert.setContentText(amigo + " ahora está en linea");
+                    alert.showAndWait();
+                });
+
     }
 
     //metodo que borra el amigo en el hashmap de chats y si esta seleccionado
@@ -289,6 +298,16 @@ public class VClienteController implements Initializable {
             this.txtChat.setText("Tu amigo no se encuentra en linea");
             this.txtMensaje.setEditable(false);
         }
+/*
+        Platform.runLater(
+                () -> {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText(null);
+                    alert.setTitle("Información");
+                    alert.setContentText(amigo + " se ha desconectado");
+                    alert.showAndWait();
+                });*/
+
     }
 
     //metodo que pone a un usuario de primero en la lista de amigos
